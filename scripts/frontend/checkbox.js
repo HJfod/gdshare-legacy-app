@@ -5,33 +5,51 @@ class CheckBox extends HTMLElement {
 
     connectedCallback() {
         this.addEventListener("click", e => this.check());
-        this.innerHTML = `<tick-mark></tick-mark><text>\u2003\u2003${this.innerHTML}</text>`;
+        this.innerHTML = `<text>\u2003\u2003${this.innerHTML}</text>`;
+        this.parentNode.insertBefore(document.createElement("tick-mark"), this);
+        if (!this.hasAttribute("checked")) {
+            this.previousSibling.style.opacity = 0;
+        }
     }
 
     check() {
         if (this.hasAttribute("checked")) {
             this.removeAttribute("checked");
-//          this.children[0].style.opacity = 0;
+            this.previousSibling.style.opacity = 0;
         } else {
             this.setAttribute("checked","");
- //         this.children[0].style.opacity = 1;
+            this.previousSibling.style.opacity = 1;
         }
     }
 }
 
-class mSearch extends HTMLInputElement {
+class SearchBox extends HTMLElement {
     constructor() {
         super();
     }
 
     connectedCallback() {
+        const i = document.createElement("input");
+        i.classList.add("search-input")
+        i.setAttribute("placeholder", "Type to search...");
+        this.appendChild(i);
+
         const b = document.createElement("button");
-        b.innerHTML = "\u{10005}";
+        b.classList.add("search-button")
+        b.innerHTML = "\u2715";
+        b.setAttribute("onclick", `this.previousSibling.value = ""; this.style.display = "none"`);
         this.appendChild(b);
 
-        console.log(b);
+        this.children[0].addEventListener("input", e => this.search());
+    }
+
+    search() {
+        //document.querySelector(`select-menu[menu="${this.getAttribute("menu")}"]`).search(this.children[0].value);
+        if (this.children[0].value) {
+            this.children[1].style.display = "initial";
+        }
     }
 }
 
 customElements.define('check-box', CheckBox);
-customElements.define('m-search', mSearch, { extends: "input" });
+customElements.define('search-box', SearchBox);

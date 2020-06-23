@@ -64,10 +64,17 @@ check-box[checked]:hover::before {
 }
 
 tick-mark {
-    border: 2px solid var(--color-text);
-    border-bottom: 2px;
-    border-left: 2px;
-    opacity: 0;
+    width: calc( var(--size-text) / 3 );
+    height: calc( var(--size-text) / 1.8 );
+    border: calc( var(--size-text) / 6 ) solid var(--color-text);
+    transform: rotate(45deg);
+    border-top: calc( var(--size-text) / 6 );
+    border-left: calc( var(--size-text) / 6 );
+    margin-top: calc( var(--size-text) / 6 );
+    margin-left: calc( var(--size-pad) / 2.5 );
+    position: absolute;
+    display: block;
+    z-index: 5;
 }
 
 
@@ -75,7 +82,11 @@ tick-mark {
 input {
     background-color: var(--color-light);
     width: calc( 100% - 4 * var(--size-pad) );
-    padding: var(--size-pad);
+    padding-left: var(--size-pad);
+    padding-right: var(--size-pad);
+    padding-top: calc( var(--size-pad) / 1.8 );
+    padding-bottom: calc( var(--size-pad) / 1.8 );
+    font-size: var(--size-text);
     display: block;
     border-radius: var(--size-corner);
     border: none;
@@ -83,6 +94,54 @@ input {
     transition-duration: var(--trans);
 }
 
-input:hover {
+input:not(.search-input):hover {
     background-color: var(--color-lighter);
+}
+
+search-box {
+    background-color: var(--color-light);
+    width: calc( 100% - 4 * var(--size-pad) );
+    padding-left: var(--size-pad);
+    padding-right: var(--size-pad);
+    padding-top: calc( var(--size-pad) / 1.5 );
+    padding-bottom: calc( var(--size-pad) / 3 );
+    font-size: var(--size-text);
+    display: block;
+    border-radius: var(--size-corner);
+    border: none;
+    color: var(--color-text);
+    transition-duration: var(--trans);
+}
+
+search-box:hover {
+    background-color: var(--color-lighter);
+}
+
+.search-input {
+    background-color: rgba(0,0,0,0);
+    padding: 0px;
+    font-size: var(--size-text);
+    display: inline;
+    border-radius: 0px;
+    border: none;
+    color: var(--color-text);
+    transition-duration: var(--trans);
+}
+
+.search-button {
+    background-color: rgba(0,0,0,0);
+    color: var(--color-text);
+    transition-duration: var(--trans);
+    border: none;
+    border-radius: 100%;
+    position: absolute;
+    margin-top: calc( 0px - ( var(--size-pad) / 4 ) );
+    margin-left: 40px;
+    height: calc( var(--size-text) * 2 );
+    width: calc( var(--size-text) * 2 );
+    display: none;
+}
+
+.search-button:hover {
+    background-color: var(--color-hover);
 }
