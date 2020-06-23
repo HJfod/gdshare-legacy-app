@@ -1,0 +1,88 @@
+select-menu { 
+    background-color: var(--color-light);
+    width: calc( 100% - 4 * var(--size-pad) );
+    padding: var(--size-pad);
+    display: block;
+    border-radius: var(--size-corner);
+    overflow-y: auto;
+}
+
+.option {
+    width: 100%;
+    height: var(--size-option);
+    background-color: rgba(0,0,0,0);
+    color: var(--color-text);
+    border-radius: var(--size-corner);
+    transition-duration: var(--trans);
+    border: none;
+    margin-bottom: calc( var(--size-buffer) / 2 );
+    font-size: var(--size-text);
+}
+
+.o-selected {
+    background-color: var(--color-main);
+}
+
+.option:not(.o-selected):hover {
+    background-color: var(--color-hover);
+}
+
+.o-selected:hover {
+    background-color: var(--color-secondary);
+}
+
+
+
+check-box {
+    display: block;
+    user-select: none;
+}
+
+check-box::before {
+    content: "";
+    border: calc( var(--size-text) / 1.5 ) solid var(--color-light);
+    border-radius: calc( var(--size-corner) / 2 );
+    position: absolute;
+    transition-duration: var(--trans);
+    font-size: 0px;
+}
+
+check-box[checked]::before {
+    border-color: var(--color-main);
+}
+
+check-box:hover {
+    cursor: pointer;
+}
+
+check-box:hover::before {
+    border-color: var(--color-lighter);
+}
+
+check-box[checked]:hover::before {
+    border-color: var(--color-secondary);
+}
+
+tick-mark {
+    border: 2px solid var(--color-text);
+    border-bottom: 2px;
+    border-left: 2px;
+    opacity: 0;
+}
+
+
+
+input {
+    background-color: var(--color-light);
+    width: calc( 100% - 4 * var(--size-pad) );
+    padding: var(--size-pad);
+    display: block;
+    border-radius: var(--size-corner);
+    border: none;
+    color: var(--color-text);
+    transition-duration: var(--trans);
+}
+
+input:hover {
+    background-color: var(--color-lighter);
+}

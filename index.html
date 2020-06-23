@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>GDShare</title>
+        <link rel="stylesheet" href="scripts/styles/main.css"/>
+        <link rel="stylesheet" href="scripts/styles/titlebar.css"/>
+        <link rel="stylesheet" href="scripts/styles/content.css"/>
+        <link rel="stylesheet" href="scripts/styles/elements.css"/>
+        <script defer src="scripts/frontend/main.js"></script>
+        <script defer src="scripts/frontend/tabs.js"></script>
+        <script defer src="scripts/frontend/select.js"></script>
+        <script defer src="scripts/frontend/checkbox.js"></script>
+    </head>
+    <body>
+
+        <app-titlebar>
+            <text class="app-title">GDShare <t-dark>v1.0</t-dark></text>
+
+            <app-buffer></app-buffer>
+
+            <button class="app-title-button" onclick="ipcSend({ action: 'app-mz' })">&#9472;</button>
+            <button class="app-title-button" onclick="ipcSend({ action: 'app-fs' })">&#9744;</button>
+            <button class="app-title-button close" onclick="window.close()">&#10005;</button>
+        </app-titlebar>
+
+        <app-main>
+            
+            <app-tabs>
+                <app-tab link="backup" default>Backups</app-tab>
+                <app-tab link="export">Export</app-tab>
+                <app-tab link="import">Import</app-tab>
+                <app-tab link="analyze">Analyze</app-tab>
+            </app-tabs>
+
+            <app-content>
+
+                <app-page link="backup">
+                    <select-menu menu="test-menu" size=4 options='[
+                        "Test 1",
+                        "Vamoose",
+                        "Counter Arguments",
+                        "Cool shit",
+                        "More options",
+                        "My balls are blue",
+                        "Roses are grey",
+                        "sdfjgfsdgd"
+                    ]'></select-menu>
+
+                    <button onclick="alert(document.querySelector('select-menu').getValue())">get</button>
+
+                    <check-box>This is a checkbox</check-box>
+
+                    <input type="m-search" menu="test-menu"></input>
+                </app-page>
+
+                <app-page link="export">
+                    <text>Exports here</text>
+                </app-page>
+
+                <app-page link="import">
+                    <text>Imports here</text>
+                </app-page>
+
+                <app-page link="analyze">
+                    <text>Level analysis here</text>
+                </app-page>
+
+            </app-content>
+
+        </app-main>
+
+    </body>
+</html>

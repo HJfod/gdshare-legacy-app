@@ -1,0 +1,67 @@
+@import url("main.css");
+
+app-tabs {
+    height: var(--size-tab);
+    position: absolute;
+    padding: 0px;
+    display: flex;
+    overflow-y: hidden;
+}
+
+app-tab {
+    height: calc( var(--size-tab) - var(--size-buffer) );
+    background-color: rgba(0,0,0,0);
+    border-radius: var(--size-corner) var(--size-corner) 0px 0px;
+    padding-left: calc( var(--size-tab) / 3.5 );
+    padding-right: calc( var(--size-tab) / 3.5 );
+    padding-top: calc( var(--size-tab) / 6 );
+    margin-right: 4px;
+    margin-top: var(--size-buffer);
+    transition-duration: var(--trans);
+    user-select: none;
+    opacity: .5;
+    font-size: calc( var(--size-tab) / 2.7 );
+}
+
+.selected-tab {
+    background-color: var(--color-dark);
+    transition-duration: 0s;
+    opacity: 1;
+}
+
+app-tab:not(.selected-tab):hover {
+    background-color: var(--color-hover);
+    opacity: 1;
+}
+
+app-content {
+    position: absolute;
+    background-color: var(--color-dark);
+    top: var(--size-titlebar);
+    height: calc( 100% - var(--size-tab) );
+    top: var(--size-tab);
+    padding: var(--size-pad);
+    width: 100%;
+}
+
+app-page {
+    font-family: "Main";
+    color: var(--color-text);
+}
+
+button:not(.option):not(.app-title-button) {
+    background-color: var(--color-light);
+    padding-left: var(--size-pad);
+    padding-right: var(--size-pad);
+    padding-top: calc( var(--size-pad) / 1.5 );
+    padding-bottom: calc( var(--size-pad) / 1.5 );
+    color: var(--color-text);
+    border-radius: var(--size-corner);
+    border: none;
+    transition-duration: var(--trans);
+    font-size: var(--size-text);
+}
+
+button:not(.option):not(.app-title-button):hover {
+    background-color: var(--color-lighter);
+}

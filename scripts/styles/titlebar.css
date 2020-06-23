@@ -1,0 +1,48 @@
+app-titlebar {
+    background: var(--color-titlebar);
+    font-family: "Main";
+    height: var(--size-titlebar);
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    -webkit-app-region: drag;
+    display: flex;
+}
+
+.app-title {
+    font-family: "Main";
+    font-size: calc( var(--size-titlebar) / 2);
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: calc( var(--size-titlebar) / 4 );
+    color: var(--color-titlebar-text);
+    white-space: nowrap;
+}
+
+app-buffer {
+    margin: auto;
+}
+
+.app-title-button {
+    font-family: "Main";
+    color: var(--color-titlebar-text);
+    background-color: rgba(0,0,0,0);
+    border: none;
+    width: var(--size-titlebar);
+    height: var(--size-titlebar);
+    -webkit-app-region: no-drag;
+    align-self: flex-end;
+    font-size: calc( var(--size-titlebar) / 2.2);
+    transition-duration: var(--trans);
+    margin-bottom: 0px;
+}
+
+.app-title-button:hover {
+    background-color: var(--color-hover);
+}
+
+.app-title-button.close:hover {
+    background-color: #f00;
+    color: #fff;
+}

@@ -1,0 +1,83 @@
+:root {
+    --color-background:         #141414;
+    --color-dark:               #252526;
+    --color-light:              #39393a;
+    --color-lighter:            #49494a;
+    --color-main:               #23a1c0;
+    --color-secondary:          rgb(73, 175, 141);
+    --color-titlebar:           linear-gradient(to right,#34d97f,#2bd5ff);
+    --color-titlebar-text:      #000;
+    --color-hover:              rgba(255,255,255,0.15);
+    --color-text:               #fff;
+
+    --size-titlebar:            30px;
+    --size-pad:                 15px;
+    --size-tab:                 40px;
+    --size-buffer:              8px;
+    --size-option:              35px;
+    --size-corner:              10px;
+    --size-text:                14px;
+
+    --trans:                    .1s;
+}
+
+@font-face {
+    font-family: 'Main';
+    src: url('../../resources/fonts/OpenSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Main-Bold';
+    src: url('../../resources/fonts/Montserrat-Bold.ttf');
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: "Main";
+    overflow: hidden;
+    font-size: var(--size-text);
+}
+
+app-main {
+    width: 100%;
+    height: calc( 100% - var(--size-titlebar));
+    top: var(--size-titlebar);
+    left: 0px;
+    position: absolute;
+}
+
+t-dark {
+    opacity: 0.6;
+}
+
+* {
+    outline: none;
+    margin-bottom: var(--size-buffer);
+}
+
+::-webkit-scrollbar {
+	width: var(--size-pad);
+	height: var(--size-pad);
+	transition-duration: var(--trans);
+}
+
+::-webkit-scrollbar-track {
+	background: var(--color-light);
+	transition-duration: var(--trans);
+	width: var(--size-pad);
+	height: var(--size-pad);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-main);
+	transition-duration: var(--trans);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--color-secondary);
+	border-radius: 0px;
+	cursor: pointer;
+}
