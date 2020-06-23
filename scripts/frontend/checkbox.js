@@ -47,6 +47,8 @@ class SearchBox extends HTMLElement {
         //document.querySelector(`select-menu[menu="${this.getAttribute("menu")}"]`).search(this.children[0].value);
         if (this.children[0].value) {
             this.children[1].style.display = "initial";
+        }else {
+            this.children[1].style.display = "none";
         }
     }
 }
