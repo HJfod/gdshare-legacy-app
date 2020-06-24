@@ -11,6 +11,11 @@ class SelectMenu extends HTMLElement {
                 this.addOption(i);
             });
         }
+
+        const t = document.createElement("select-info");
+        t.style.display = "none";
+        t.innerHTML = this.hasAttribute("empty-text") ? this.getAttribute("empty-text") : "No results found.";
+        this.appendChild(t);
     }
 
     addOption(value) {
@@ -31,6 +36,25 @@ class SelectMenu extends HTMLElement {
         if (!this.hasAttribute("multiple")) arr(this.querySelectorAll(".o-selected")).forEach(o => o.classList.remove("o-selected"));
 
         to.classList.contains('o-selected') ? to.classList.remove('o-selected') : to.classList.add('o-selected');
+    }
+
+    search(query) {
+        let found = false;
+        arr(this.children).forEach(o => {
+            if (o.tagName !== "select-info") {
+                if (o.innerHTML.toLowerCase().trim().includes(query.toLowerCase().trim())) {
+                    found = true;
+                    o.style.display = "initial";
+                } else {
+                    o.style.display = "none";
+                }
+            }
+        });
+        if (!found) {
+            this.querySelector("select-info").style.display = "initial";
+        } else {
+            this.querySelector("select-info").style.display = "none";
+        }
     }
 }
 

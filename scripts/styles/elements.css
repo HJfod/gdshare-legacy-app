@@ -5,6 +5,12 @@ select-menu {
     display: block;
     border-radius: var(--size-corner);
     overflow-y: auto;
+    text-align: center;
+}
+
+select-info {
+    font-size: var(--size-text);
+    opacity: .5;
 }
 
 .option {

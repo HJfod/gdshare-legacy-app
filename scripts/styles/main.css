@@ -9,6 +9,7 @@
     --color-titlebar-text:      #000;
     --color-hover:              rgba(255,255,255,0.15);
     --color-text:               #fff;
+    --color-shadow:             rgba(0,0,0,.5);
 
     --size-titlebar:            30px;
     --size-pad:                 15px;
@@ -17,6 +18,7 @@
     --size-option:              35px;
     --size-corner:              10px;
     --size-text:                14px;
+    --size-shadow:              20px;
 
     --trans:                    .1s;
 }
@@ -80,4 +82,16 @@ t-dark {
 	background: var(--color-secondary);
 	border-radius: 0px;
 	cursor: pointer;
+}
+
+alert-box {
+    background-color: var(--color-light);
+    box-shadow: 0px 0px var(--size-shadow) var(--color-shadow);
+    width: 80%;
+    height: 50%;
+    left: 10%;
+    top: 50%;
+    position: absolute;
+    transform: translateY(-50%);
+    display: none;
 }

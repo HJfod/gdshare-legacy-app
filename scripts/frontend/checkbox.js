@@ -35,16 +35,16 @@ class SearchBox extends HTMLElement {
         this.appendChild(i);
 
         const b = document.createElement("button");
-        b.classList.add("search-button")
+        b.classList.add("search-button");
         b.innerHTML = "\u2715";
-        b.setAttribute("onclick", `this.previousSibling.value = ""; this.style.display = "none"`);
+        b.setAttribute("onclick", `this.previousSibling.value = ""; this.style.display = "none"; this.parentNode.search()`);
         this.appendChild(b);
 
         this.children[0].addEventListener("input", e => this.search());
     }
 
     search() {
-        //document.querySelector(`select-menu[menu="${this.getAttribute("menu")}"]`).search(this.children[0].value);
+        document.querySelector(`select-menu[menu="${this.getAttribute("menu")}"]`).search(this.children[0].value);
         if (this.children[0].value) {
             this.children[1].style.display = "initial";
         }else {

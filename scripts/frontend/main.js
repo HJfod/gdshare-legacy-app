@@ -42,3 +42,9 @@ window.addEventListener("message", event => {
         }
     }
 });
+
+function splash(message) {
+    const a = document.querySelector("alert-box");
+    message.startsWith("<") ? a.innerHTML = message : a.innerHTML = `<text>${message}</text>`;
+    a.style.display = "initial";
+}
