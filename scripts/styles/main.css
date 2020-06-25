@@ -21,11 +21,11 @@
     --size-shadow:              20px;
     --size-popup-default:       30%;
     --size-svg:                 24px;
-    --size-loader-radius:       100px;
-    --size-loader-thickness:    16px;
+    --size-loader-radius:       75px;
+    --size-loader-thickness:    12px;
 
     --trans:                    .1s;
-    --loader-spin:              .8s;
+    --loader-spin:              .75s;
 }
 
 @font-face {
