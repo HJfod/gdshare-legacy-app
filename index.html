@@ -11,6 +11,8 @@
         <script defer src="scripts/frontend/tabs.js"></script>
         <script defer src="scripts/frontend/select.js"></script>
         <script defer src="scripts/frontend/checkbox.js"></script>
+        <script defer src="scripts/frontend/alert.js"></script>
+        <script defer src="scripts/frontend/char.js"></script>
     </head>
     <body>
 
@@ -48,7 +50,7 @@
                     ]'></select-menu>
 
                     <button onclick="alert(document.querySelector('select-menu').getValue())">get</button><br>
-                    <button onclick="splash(`moro kamerit`)">alert</button>
+                    <button onclick="splash({ type: 'loading' }); setTimeout(() => splash('sex'), 3000)">alert</button>
 
                     <check-box>This is a checkbox</check-box>
                     <check-box>This is a checkbox</check-box>
@@ -72,7 +74,13 @@
 
         </app-main>
 
-        <alert-box></alert-box>
+        <alert-area id="alert">
+            <alert-box>
+                <alert-close>&#10005;</alert-close>
+                <alert-content></alert-content>
+            </alert-box>
+            <loading-circle></loading-circle>
+        </alert-area>
 
     </body>
 </html>

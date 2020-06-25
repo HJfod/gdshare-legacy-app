@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+<g class="layer">
+<g transform="rotate(45, 250.029, 180.029)">
+<ellipse cx="154.766566" cy="370.553023" fill="#00ff00" rx="47.631073" ry="47.631073" stroke-width="0"/>
+<ellipse cx="345.290859" cy="-10.495563" fill="#00ff00" rx="47.631073" ry="47.631073" stroke-width="0"/>
+<rect fill="#00ff00" height="95.262147" stroke-width="0" width="238.155366" x="154.766566" y="322.92195"/>
+<rect fill="#00ff00" height="428.679659" stroke-width="0" width="95.262147" x="297.659786" y="-10.495563"/>
+</g>
+</g>
+</svg>

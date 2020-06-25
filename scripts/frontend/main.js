@@ -44,7 +44,17 @@ window.addEventListener("message", event => {
 });
 
 function splash(message) {
-    const a = document.querySelector("alert-box");
-    message.startsWith("<") ? a.innerHTML = message : a.innerHTML = `<text>${message}</text>`;
-    a.style.display = "initial";
+    if (typeof(message) === "object") {
+        if (message.type === "loading") {
+            document.querySelector("alert-area").style.display = "initial";
+            document.querySelector("alert-box").style.display = "none";
+            document.querySelector("loading-circle").style.display = "initial";
+        }
+    } else {
+        const a = document.querySelector("alert-box").querySelector("alert-content");
+        message.startsWith("<") ? a.innerHTML = message : a.innerHTML = `<text>${message}</text>`;
+        document.querySelector("alert-area").style.display = "initial";
+        document.querySelector("alert-box").style.display = "initial";
+        document.querySelector("loading-circle").style.display = "none";
+    }
 }

@@ -19,8 +19,13 @@
     --size-corner:              10px;
     --size-text:                14px;
     --size-shadow:              20px;
+    --size-popup-default:       30%;
+    --size-svg:                 24px;
+    --size-loader-radius:       100px;
+    --size-loader-thickness:    16px;
 
     --trans:                    .1s;
+    --loader-spin:              .8s;
 }
 
 @font-face {
@@ -84,14 +89,81 @@ t-dark {
 	cursor: pointer;
 }
 
+
+
+alert-area {
+    background-color: rgba(0,0,0,.5);
+    top: var(--size-titlebar);
+    left: 0px;
+    height: calc( 100% - var(--size-titlebar) );
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+    display: none;
+}
+
 alert-box {
     background-color: var(--color-light);
+    color: var(--color-text);
     box-shadow: 0px 0px var(--size-shadow) var(--color-shadow);
-    width: 80%;
-    height: 50%;
-    left: 10%;
+    width: calc( var(--size-popup-default) * 2 );
+    height: var(--size-popup-default);
+    left: 50%;
     top: 50%;
+    padding: var(--size-pad);
     position: absolute;
-    transform: translateY(-50%);
-    display: none;
+    transform: translateY(-50%) translateX(-50%);
+    opacity: 1;
+}
+
+alert-content {
+    padding: var(--size-pad);
+    position: absolute;
+    width: calc( 100% - var(--size-pad) * 4 );
+    height: calc( 100% - var(--size-pad) * 4 );
+}
+
+alert-close {
+    color: var(--color-text);
+    position: absolute;
+    right: var(--size-pad);
+    top: var(--size-pad);
+    user-select: none;
+    padding: 0px;
+    background-color: rgba(0,0,0,0);
+    transition-duration: var(--trans);
+    font-size: var(--size-text);
+    text-align: center;
+    opacity: .5;
+    transform: translateY(-25%);
+    z-index: 5;
+}
+
+alert-close:hover {
+    opacity: 1;
+}
+
+
+loading-circle {
+    border: var(--size-loader-thickness) solid rgba(0,0,0,0);
+    border-top: var(--size-loader-thickness) solid var(--color-main);
+    border-bottom: var(--size-loader-thickness) solid var(--color-main);
+    border-radius: 50%;
+    width: var(--size-loader-radius);
+    height: var(--size-loader-radius);
+    top: calc( 50% - var(--size-loader-radius) / 2 );
+    left: calc( 50% - var(--size-loader-radius) / 2 );
+    animation: spin var(--loader-spin) linear infinite;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+.svg {
+    transform: translateY(+50%);
 }
