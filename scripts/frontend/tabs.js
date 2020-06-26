@@ -13,9 +13,11 @@ class AppTab extends HTMLElement {
     switchTo() {
         arr(document.querySelectorAll("app-page")).forEach(i => {
             if (i.getAttribute("link") === this.getAttribute("link")) {
-                i.style.display = "initial";
+                i.style.opacity = "1";
+                i.style.pointerEvents = "initial";
             } else {
-                i.style.display = "none";
+                i.style.opacity = "0";
+                i.style.pointerEvents = "none";
             }
         });
 
@@ -26,4 +28,22 @@ class AppTab extends HTMLElement {
     }
 }
 
+class AppPage extends HTMLElement {
+    constructor () {
+        super();
+    }
+
+    connectedCallback() {
+        this.addEventListener("resize", () => { // THIS EVENT HAS TO BE CHANGED TO SOMETHING THAT FIRES CONSISTENTLY
+            if (this.scrollHeight > this.offsetHeight) {
+                this.style.setProperty("--resize", 3);
+            } else {
+                this.style.setProperty("--resize", 0);
+            }
+            console.log("here");
+        });
+    }
+}
+
 customElements.define('app-tab', AppTab);
+customElements.define('app-page', AppPage);

@@ -25,6 +25,7 @@
     --size-loader-thickness:    12px;
 
     --trans:                    .1s;
+    --trans-long:               .5s;
     --loader-spin:              .75s;
 }
 

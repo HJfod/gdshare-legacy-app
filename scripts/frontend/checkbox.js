@@ -20,6 +20,9 @@ class CheckBox extends HTMLElement {
             this.setAttribute("checked","");
             this.previousSibling.style.opacity = 1;
         }
+        if (this.hasAttribute("var")) {
+            global[this.getAttribute("var")] = this.hasAttribute("checked");
+        }
     }
 }
 

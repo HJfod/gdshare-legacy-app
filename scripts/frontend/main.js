@@ -1,4 +1,5 @@
 const html = document.getElementsByTagName('html')[0];
+const global = {};
 
 function arr(list) {
     return Array.prototype.slice.call(list);

@@ -13,6 +13,7 @@
         <script defer src="scripts/frontend/checkbox.js"></script>
         <script defer src="scripts/frontend/alert.js"></script>
         <script defer src="scripts/frontend/char.js"></script>
+        <script defer src="scripts/frontend/rollover.js"></script>
     </head>
     <body>
 
@@ -33,6 +34,7 @@
                 <app-tab link="export">Export</app-tab>
                 <app-tab link="import">Import</app-tab>
                 <app-tab link="analyze">Analyze</app-tab>
+                <app-tab link="settings">Settings</app-tab>
             </app-tabs>
 
             <app-content>
@@ -49,10 +51,10 @@
                         "sdfjgfsdgd"
                     ]'></select-menu>
 
-                    <button onclick="alert(document.querySelector('select-menu').getValue())">get</button><br>
+                    <button onclick="alert(global.allow ? document.querySelector('select-menu').getValue() : 'no you can NOT see that!')">get</button>
                     <button onclick="splash({ type: 'loading' }); setTimeout(() => splash(`<c-h a='checkmark'></c-h><c-h a='crossmark'/>`), 3000)">alert</button>
 
-                    <check-box>This is a checkbox</check-box>
+                    <check-box var="allow">This is a checkbox</check-box>
                     <check-box>This is a checkbox</check-box>
 
                     <search-box menu="test-menu"></search-box>
@@ -68,6 +70,45 @@
 
                 <app-page link="analyze">
                     <text>Level analysis here</text>
+                </app-page>
+
+                <app-page link="settings">
+                    <roll-over>
+                        <roll-text>Rollover this menu bro</roll-text>
+                        <roll-content>
+                            <text>wow this is text inside the rollover</text>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <p>jaja</p>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <p>jaja</p>
+                        </roll-content>
+                    </roll-over>
+
+                    <roll-over>
+                        <roll-text>Rollover this menu bro</roll-text>
+                        <roll-content>
+                            <text>wow this is text inside the rollover</text>
+                            <br>
+                            <br>
+                            <p>jaja</p>
+                            <br>
+                            <br>
+                            <p>jaja</p>
+                        </roll-content>
+                    </roll-over>
                 </app-page>
 
             </app-content>

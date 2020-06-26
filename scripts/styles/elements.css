@@ -151,3 +151,45 @@ search-box:hover {
 .search-button:hover {
     background-color: var(--color-hover);
 }
+
+
+
+roll-text {
+    display: block;
+    user-select: none;
+    opacity: .75;
+    transition-duration: var(--trans);
+}
+
+roll-text:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+roll-text::before {
+    content: "❯";
+    display: inline-block;
+    color: var(--color-text);
+    transition-duration: calc( var(--trans-long) / 2 );
+    margin-right: var(--size-pad);
+}
+
+roll-text[rolled]::before {
+    transform: rotate(90deg);
+}
+
+roll-content {
+    overflow-y: hidden;
+    display: block;
+    transition-duration: var(--trans-long);
+    max-height: var(--min);
+    opacity: 0;
+
+    --max: 10px;
+    --min: 9999px;
+}
+
+roll-text[rolled] ~ roll-content {
+    max-height: var(--max);
+    opacity: 1;
+}
