@@ -6,7 +6,7 @@ Selection menu
  * multiple: `bool` If included, user can select multiple items `optional`
  * options: `string[]` Menu options `optional`
  * menu: `string` Search box link `optional`
- * empty-text: `string` The text to display when search results return empty / there are no menu items.
+ * empty-text: `string` The text to display when search results return empty / there are no menu items. `optional`
 
 ```<c-h>```
 
@@ -31,7 +31,7 @@ Tab page
 
 Custom checkbox
 
-  * var: `string` What variable in `global` this checkbox controls `optional`
+  * var: `string` What variable in `global{}` this checkbox controls `optional`
 
 ```<search-box>```
 
