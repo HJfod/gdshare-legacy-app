@@ -16,7 +16,7 @@ let wMain;
 const dim = { w: 400, h: 550 };
 const windowSettings = {
     frame: false, 
-//	icon: path.join(__dirname,"resources/icon-2.ico"), 
+	icon: path.join(__dirname,"resources/share.ico"), 
 	height: dim.h, 
 	width: dim.w, 
 	webPreferences: { 

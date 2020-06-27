@@ -182,14 +182,11 @@ roll-content {
     overflow-y: hidden;
     display: block;
     transition-duration: var(--trans-long);
-    max-height: var(--min);
+    height: 0px;
     opacity: 0;
-
-    --max: 10px;
-    --min: 9999px;
 }
 
 roll-text[rolled] ~ roll-content {
-    max-height: var(--max);
+    height: var(--max);
     opacity: 1;
 }

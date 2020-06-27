@@ -3,9 +3,9 @@
     --color-dark:               #252526;
     --color-light:              #39393a;
     --color-lighter:            #49494a;
-    --color-main:               #23a1c0;
-    --color-secondary:          rgb(73, 175, 141);
-    --color-titlebar:           linear-gradient(to right,#34d97f,#2bd5ff);
+    --color-main:               #2cd5ff;
+    --color-secondary:          rgb(103, 255, 204);
+    --color-titlebar:           linear-gradient(to right,var(--color-secondary),var(--color-main));
     --color-titlebar-text:      #000;
     --color-hover:              rgba(255,255,255,0.15);
     --color-text:               #fff;
@@ -67,8 +67,8 @@ t-dark {
 }
 
 ::-webkit-scrollbar {
-	width: var(--size-pad);
-	height: var(--size-pad);
+	width: calc( var(--size-pad) / 2 );
+	height: calc( var(--size-pad) / 4 );
 	transition-duration: var(--trans);
 }
 

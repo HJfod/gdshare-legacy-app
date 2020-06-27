@@ -2,9 +2,11 @@
 
 app-tabs {
     height: var(--size-tab);
+    width: 100%;
     position: absolute;
     padding: 0px;
     display: flex;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 

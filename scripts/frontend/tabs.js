@@ -34,7 +34,7 @@ class AppPage extends HTMLElement {
     }
 
     connectedCallback() {
-        this.addEventListener("resize", () => { // THIS EVENT HAS TO BE CHANGED TO SOMETHING THAT FIRES CONSISTENTLY
+        this.addEventListener("mousemove", () => {
             if (this.scrollHeight > this.offsetHeight) {
                 this.style.setProperty("--resize", 3);
             } else {
@@ -42,6 +42,11 @@ class AppPage extends HTMLElement {
             }
             console.log("here");
         });
+        /*
+        this.addEventListener("mouseout", () => {
+            this.style.setProperty("--resize", 0);
+        });
+        */
     }
 }
 
