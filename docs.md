@@ -54,3 +54,9 @@ Rollover menu text
 ```<roll-content>```
 
 Rollover menu content
+
+```<hyper-link>```
+
+Hyperlink
+
+ * link: `string` Link that should be opened on click `optional`

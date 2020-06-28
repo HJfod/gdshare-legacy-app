@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "make-win32": "electron-packager . gdshare --overwrite --asar --platform=win32 --arch=ia32 --ignore=.gitignore --icon=resources/share.ico --prune=true --out=release-builds --version-string.CompanyName=HJfod --version-string.FileDescription=CE --version-string.ProductName=\"GD Share\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^9.0.4"
+    "electron": "^9.0.4",
+    "electron-packager": "^15.0.0"
   },
   "dependencies": {
     "pako": "^1.0.11"
