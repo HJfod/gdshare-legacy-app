@@ -2,24 +2,23 @@ const events = require("events");
 const status = new events.EventEmitter();
 const exec = require('child_process').exec;
 const path = require("path");
+const pako = require("pako");
 const fs = require("fs");
+const { performance } = require('perf_hooks');
 
 let dLoop = "";
 let dir;
 
-function decodeXor(str, key) {
+function decodeXor(dat, key) {
     /**
-     * @author GDColon
-     * @param {String} str The data to decode
+     * @author SMJS
+     * @param {String} dat The data to decode
      * @param {Integrer} key The decoding key
      * @description Decode data as XOR
      * @returns {String} Decoded data
      */
 
-    str = String(str).split('').map(letter => letter.charCodeAt());
-    let res = "";
-    for (let i in str) res += String.fromCodePoint(str[i] ^ key);
-    return res;
+    return dat.split("").map(str => String.fromCharCode(key ^ str.charCodeAt(0))).join("");
 }
 
 function decodeBase64(str) {
@@ -51,54 +50,118 @@ function verifyDataFolder(path) {
     return !requiredFiles.length;   // if both files found, length is 0, !0 = true
 }
 
-function getLevels(data) {
+function getLevels(data, callback = null) {
     /**
      * @author GDColon, HJfod
      * @param {String} data The data to get levels from
+     * @param {Function()} callback Callback function for each loaded level
      * @description Get all levels from a data file.
      * @returns {Object[]} name: Level name, data: level data, index: how manyeth level it is
      */
-
+/*
     let levels = [];
-    let levelList = data.match(/<k>k_\d+<\/k>.+?<\/d>\n? *<\/d>/gs)
+    let levelList = data.match(/<k>k_\d+<\/k>.+?<\/d>\n? *<\/d>/gs);
     if (levelList) {
         levelList.forEach((lvl, index) => {
             let n = lvl.split(`<k>k2</k><s>`).pop();
             n = n.substring(0,n.indexOf("<")).replace(/'/g,'"');
             
             levels.push({ name: n, data: lvl, index: index });
+
+            callback(n);
         });
+    }*/
+
+    /*  Displays names of each level as they're being loaded. Horrifyingly slow. */
+    let levels = [];
+    let found = true;
+    while (found) {
+        let lvl = data.match(/<k>k_\d+<\/k>.+?<\/d>\n? *<\/d>/);
+        if (lvl) {
+            lvl = lvl[0];
+            data = data.substring(data.indexOf(lvl) + lvl.length);
+
+            let n = lvl.split(`<k>k2</k><s>`).pop();
+            n = n.substring(0,n.indexOf("<")).replace(/'/g,'"');
+            
+            levels.push({ name: n, data: lvl, index: levels.length });
+    
+            callback(n);
+        } else {
+            found = false;
+        }
     }
+
     return levels;
 }
 
-function decodeCCLocalLevels(path) {
+function getGDUserInfo(data) {
     /**
-     * @author GDColon, HJfod
-     * @param {String} path The path to the data folder
-     * @description Validate and decode CCLocalLevels
+     * @author HJfod
+     * @param {String} data Decoded CCGameManager data to get user info from
+     * @description Get certain user info from CCGameManager
      * @returns {Object} Error: Something went wrong, Data: the decoded save data.
      */
 
-    let saveData;
-    
-    try {
-        saveData = fs.readFileSync(path, "utf8");
-    } catch (err) {
-        return { error: "Unable to read file!" };
-    }
+    const statdata = getKey(data, "GS_value", "d");
+    return {
+        name: getKey(data, "playerName", "s"),
+        userID: getKey(data, "playerUserID", "i"),
+        stats: {
+            Jumps: getKey(statdata, "1", "s"),
+            Total$Attempts: getKey(statdata, "2", "s"),
+            Completed$Online$Levels: getKey(statdata, "4", "s"),
+            Demons: getKey(statdata, "5", "s"),
+            Stars: getKey(statdata, "6", "s"),
+            Diamonds: getKey(statdata, "13", "s"),
+            Orbs: getKey(statdata, "14", "s"),
+            Coins: getKey(statdata, "8", "s"),
+            User$Coins: getKey(statdata, "12", "s"),
+            Killed$Players: getKey(statdata, "9", "s"),
+        }
+    };
+}
 
-    if (!saveData.startsWith('<?xml version="1.0"?>')){
-        saveData = decodeXOR(saveData, 11);
-        saveData = Buffer.from(saveData, 'base64');
+function decodeCCFile(path) {
+    /**
+     * @author GDColon, HJfod
+     * @param {String} path The path to the data folder
+     * @description Validate and decode CCLocalLevels / CCGameManager
+     * @returns {Object} Error: Something went wrong, Data: the decoded save data.
+     */
+
+    return new Promise((res, rej) => {
+        let saveData;
+
+        let t0 = performance.now();
+        
         try {
-            saveData = zlib.unzipSync(saveData).toString()
-        } catch (e) {
-            return { error: "Save data appears to corrupt." };
+            saveData = fs.readFileSync(path, "utf8");
+        } catch (err) {
+            rej(`Unable to read file! ${err}`);
         }
 
-        return { error: false, data: saveData };
-    }
+        let t1 = performance.now();
+        console.log(`readFileSync ${Math.round(t1 - t0)}ms`);
+
+        if (!saveData.startsWith('<?xml version="1.0"?>')){
+
+            t0 = performance.now();
+            
+            try {
+                saveData = new TextDecoder("utf-8").decode(pako.inflate(Buffer.from(saveData.split("").map((str) => String.fromCharCode(11 ^ str.charCodeAt(0))).join("").replace(/-/g, "+").replace(/_/g, "/"), "base64")))
+            } catch(e) {
+                rej(e);
+            }
+
+            t1 = performance.now();
+            console.log(`decode ${Math.round(t1 - t0)}ms`);
+
+            res(saveData);
+        } else {
+            rej("Save data appears to be corrupt.")
+        }
+    });
 }
 
 function importLevel(filePath, dataPath, data = "") {
@@ -108,60 +171,64 @@ function importLevel(filePath, dataPath, data = "") {
      * @param {String} dataPath Path to the data file
      * @param {String} [data] The data of the data file (if you already have it decoded and don't want to spend time redecoding)
      * @description Import a level into a data file.
-     * @returns {Object} error: Something went wrong, data: the new save data with the level imported, info: What level was imported.
+     * @returns {Promise} reject: Something went wrong, resolve: { newData: the new save data with the level imported, info: What level was imported. }
      */
 
-    try { fs.accessSync(filePath) } catch(err) {
-        return { error: "Unable to access file." };
-    }
+    return new Promise((res, rej) => {
+        try { fs.accessSync(filePath) } catch(err) {
+            rej(`Couldn't access file: ${err}`);
+        }
 
-    if (!data) {
-        data = decodeCCLocalLevels(dataPath);
-    }
-    
-    let levelFile = fs.readFileSync(path, 'utf8');
+        if (!data) {
+            data = decodeCCFile(dataPath);
+        }
+        
+        let levelFile = fs.readFileSync(filePath, 'utf8');
 
-    data = data.replace(/<k>k1<\/k><i>\d+?<\/i>/g,"");	// remove uploaded id
-    data = data.split("<k>_isArr</k><t />")
-    data[1] = data[1].replace(/<k>k_(\d+)<\/k><d><k>kCEK<\/k>/g, (n) => { return "<k>k_" + (Number(n.slice(5).split("<")[0])+1) + "</k><d><k>kCEK</k>" })
-    data = data[0] + "<k>_isArr</k><t /><k>k_0</k>" + levelFile + data[1]
-    
-    fs.writeFileSync(dataPath, data, 'utf8');
+        data = data.replace(/<k>k1<\/k><i>\d+?<\/i>/g,"");	// remove uploaded id
+        data = data.split("<k>_isArr</k><t />")
+        data[1] = data[1].replace(/<k>k_(\d+)<\/k><d><k>kCEK<\/k>/g, (n) => { return "<k>k_" + (Number(n.slice(5).split("<")[0])+1) + "</k><d><k>kCEK</k>" })
+        data = data[0] + "<k>_isArr</k><t /><k>k_0</k>" + levelFile + data[1]
+        
+        fs.writeFileSync(dataPath, data, 'utf8');
 
-    return { error: false, data: data, info: `Imported ${levelFile.match(/<k>k2<\/k><s>(.+?)<\/s>/)}.` };
+        res({ newData: data, levelData: levelFile, info: `Imported ${levelFile.match(/<k>k2<\/k><s>(.+?)<\/s>/)}.` });
+    });
 }
 
 function exportLevel(names, from, exportPath) {
     /**
      * @author GDColon, HJfod
      * @param {String[]} names The names of the levels you want to export
-     * @param {String} from Decoded save data where the levels should be exported from
+     * @param {String[]} from Decoded levels array
      * @param {String} exportPath Folder where the level should be exported to.
      * @description a level from a data file.
-     * @returns {Object} error: Something went wrong, info: What level was exported to where.
+     * @returns {Promise} reject: Something went wrong, resolve: What level was exported to where.
      */
 
-    names.forEach(name => {
-        name = name.toLowerCase();
-        let foundLevel = from.find(x => x.toLowerCase().includes(`<k>k2</k><s>${name}</s>`));
-        if (!foundLevel){
-            return { error: `Level '${name}' not found.` };
-        }else{
-            let outputdir = `${exportPath}/${name}.gmd`;		// path
-            let n = 0;
-            while (fs.existsSync(outputdir)) {	// check if level with same name exists
-                outputdir = outputdir.substring(0,outputdir.length - name.length - 4 - (n ? n.toString().length : 0)) + name + n + ".gmd";
-                n++;
-                if (n > 20) return { error: "Too many levels exported with this name." };
+    return new Promise((res, rej) => {
+        names.forEach(name => {
+            let foundLevel = from.find(x => x.name === name);
+            if (!foundLevel){
+                rej(`Level '${name}' not found.`);
+            }else{
+                if (!exportPath) exportPath = getDir();
+                let outputdir = `${exportPath}/${name}.gmd`;		// path
+                let n = 0;
+                while (fs.existsSync(outputdir)) {	// check if level with same name exists
+                    outputdir = outputdir.substring(0,outputdir.length - name.length - 4 - (n ? n.toString().length : 0)) + name + n + ".gmd";
+                    n++;
+                    if (n > 20) rej("Too many levels exported with this name.");
+                }
+                fs.writeFileSync(outputdir, foundLevel.data.replace(/<k>k_\d+<\/k>/, ""), 'utf8');
+                
+                res(`Exported ${name} to ${exportPath}.`);
             }
-            fs.writeFileSync(outputdir, foundLevel.replace(/<k>k_\d+<\/k>/, ""), 'utf8');
-            
-            return { error: false, info: `Exported ${name} from ${from} to ${exportPath}.` };
-        }
+        });
     });
 }
 
-function getLevelValue(lvl, key, type) {
+function getKey(lvl, key, type) {
     /**
      * @author HJfod
      * @param {String} lvl Level data
@@ -175,7 +242,7 @@ function getLevelValue(lvl, key, type) {
         return lvl.split(`<k>${key}</k>`).pop().substring(0,100);
     }
     if (type){
-        return lvl.split(`<k>${key}</k><${type}>`).pop().substring(0,lvl.split(`<k>${key}</k><${type}>`).pop().indexOf('<'));
+        return lvl.split(`<k>${key}</k><${type}>`).pop().substring(0,lvl.split(`<k>${key}</k><${type}>`).pop().indexOf(`</${type}>`));
     }else{
         return lvl.split(`<k>${key}</k>`).pop().substring(0,lvl.split(`<k>${key}</k>`).pop().indexOf('>')).includes("t");
     }
@@ -241,25 +308,25 @@ function getLevelInfo(name, from = "") {
     if (!foundLevel){
         return { error: "Level not found." };
     }else{
-        let time = getLevelValue(foundLevel, "k80", "i");
-        let p = getLevelValue(foundLevel, "k41", "i");
-        let song = getLevelValue(foundLevel, "k8", "i");
-        let rev = getLevelValue(foundLevel, "k46", "i");
-        let desc = decodeBase64(getLevelValue(foundLevel, "k3", "s")).toString("utf8");
-        let copy = getLevelValue(foundLevel, "k42", "i");
+        let time = getKey(foundLevel, "k80", "i");
+        let p = getKey(foundLevel, "k41", "i");
+        let song = getKey(foundLevel, "k8", "i");
+        let rev = getKey(foundLevel, "k46", "i");
+        let desc = decodeBase64(getKey(foundLevel, "k3", "s")).toString("utf8");
+        let copy = getKey(foundLevel, "k42", "i");
 
         let levelInfo = {};
-        levelInfo["Name"] = getLevelValue(foundLevel, "k2", "s");
-        levelInfo["Length"] = getLevelValue(foundLevel, "k23", "i").replace(/^\s*$/,"Tiny").replace("1","Short").replace("2","Medium").replace("3","Long").replace("4","XL");
-        levelInfo["Creator"] = getLevelValue(foundLevel, "k5", "s");
-        levelInfo["Version"] = getLevelValue(foundLevel, "k16", "i");
+        levelInfo["Name"] = getKey(foundLevel, "k2", "s");
+        levelInfo["Length"] = getKey(foundLevel, "k23", "i").replace(/^\s*$/,"Tiny").replace("1","Short").replace("2","Medium").replace("3","Long").replace("4","XL");
+        levelInfo["Creator"] = getKey(foundLevel, "k5", "s");
+        levelInfo["Version"] = getKey(foundLevel, "k16", "i");
         levelInfo["Password"] = (p === "1") ? "Free to copy" : (p === "") ? "No copy" : p.substring(1);
-        levelInfo["Song"] = song ? replaceOfficialSongName(song) : getLevelValue(foundLevel, "k45", "i");
+        levelInfo["Song"] = song ? replaceOfficialSongName(song) : getKey(foundLevel, "k45", "i");
         levelInfo["Description"] = desc;
-        levelInfo["Object_count"] = getLevelValue(foundLevel, "k48", "i");
+        levelInfo["Object_count"] = getKey(foundLevel, "k48", "i");
         levelInfo["Editor_time"] = time > 3600 ? (time/3600).toFixed(1) + "h" : (time/60).toFixed(1) + "m";
-        levelInfo["Verified"] = getLevelValue(foundLevel, "k14", false);
-        levelInfo["Attempts"] = getLevelValue(foundLevel, "k18", "i");
+        levelInfo["Verified"] = getKey(foundLevel, "k14", false);
+        levelInfo["Attempts"] = getKey(foundLevel, "k18", "i");
         levelInfo["Revision"] = rev === "" ? "None" : rev;
         levelInfo["Copied_from"] = copy === "" ? "None" : copy;
         
@@ -275,6 +342,14 @@ function getDir() {
      */
     
     return dir;
+}
+
+function getCCPath(which = "ll") {
+    if (which === "gm") {
+        return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCGameManager.dat").replace(/\\/g,"/");
+    } else {
+        return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCLocalLevels.dat").replace(/\\/g,"/");
+    }
 }
 
 function test() {
@@ -305,14 +380,16 @@ module.exports = {
     decodeBase64,
     verifyDataFolder,
     getLevels,
-    decodeCCLocalLevels,
+    decodeCCFile,
     importLevel,
     exportLevel,
-    getLevelValue,
+    getKey,
     replaceOfficialSongName,
     getLevelInfo,
     test,
     initializeApp,
     getDir,
+    getGDUserInfo,
+    getCCPath,
     status
 }

@@ -13,7 +13,7 @@ class SelectMenu extends HTMLElement {
         }
 
         const t = document.createElement("select-info");
-        t.style.display = "none";
+        if (this.hasAttribute("options")) t.style.display = "none";
         t.innerHTML = this.hasAttribute("empty-text") ? this.getAttribute("empty-text") : "No results found.";
         this.appendChild(t);
     }
@@ -41,7 +41,7 @@ class SelectMenu extends HTMLElement {
     search(query) {
         let found = false;
         arr(this.children).forEach(o => {
-            if (o.tagName !== "select-info") {
+            if (o.tagName !== "SELECT-INFO") {
                 if (o.innerHTML.toLowerCase().trim().includes(query.toLowerCase().trim())) {
                     found = true;
                     o.style.display = "initial";

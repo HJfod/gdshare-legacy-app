@@ -46,3 +46,8 @@ app-buffer {
     background-color: #f00;
     color: #fff;
 }
+
+.version-title {
+    opacity: 0;
+    transition-duration: var(--trans);
+}

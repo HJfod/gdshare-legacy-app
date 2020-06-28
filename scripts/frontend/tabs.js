@@ -40,7 +40,6 @@ class AppPage extends HTMLElement {
             } else {
                 this.style.setProperty("--resize", 0);
             }
-            console.log("here");
         });
         /*
         this.addEventListener("mouseout", () => {

@@ -9,4 +9,15 @@ class Char extends HTMLElement {
     }
 }
 
+class Dot extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        this.innerHTML = `•`;
+    }
+}
+
 customElements.define('c-h', Char);
+customElements.define('c-d', Dot);

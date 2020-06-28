@@ -180,13 +180,24 @@ roll-text[rolled]::before {
 
 roll-content {
     overflow-y: hidden;
-    display: block;
     transition-duration: var(--trans-long);
     height: 0px;
     opacity: 0;
+    display: block;
 }
 
 roll-text[rolled] ~ roll-content {
     height: var(--max);
     opacity: 1;
+}
+
+hyper-link {
+	cursor: pointer;
+	color: var(--color-main);
+	text-decoration: underline;
+}
+
+hyper-link:hover {
+	color: var(--color-secondary);
+    transition-duration: var(--trans);
 }

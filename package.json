@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^9.0.4"
+  },
+  "dependencies": {
+    "pako": "^1.0.11"
   }
 }

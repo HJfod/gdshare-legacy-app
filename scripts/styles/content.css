@@ -75,3 +75,22 @@ button:not(.option):not(.app-title-button):not(.search-button) {
 button:not(.option):not(.app-title-button):not(.search-button):hover {
     background-color: var(--color-lighter);
 }
+
+home-screen {
+    opacity: 0;
+    transition-duration: var(--trans-extra-long);
+    display: block;
+}
+
+welcome-message {
+    font-family: "Main-Bold";
+    font-size: calc( var(--size-text) * 2 );
+    display: block;
+}
+
+w-small {
+    font-family: "Main-Bold";
+    font-size: var(--size-text);
+    opacity: .5;
+    display: block;
+}

@@ -7,10 +7,12 @@ class RollOver extends HTMLElement {
         this.txt = this.querySelector("roll-text");
         this.con = this.querySelector("roll-content");
 
-        this.txt.addEventListener("click", () => this.roll());/*
+        this.txt.addEventListener("click", () => this.roll());
+        
+        /*
         this.con.style.setProperty("--max", `${this.con.offsetHeight}px`);
 
-        this.con.style.setProperty("--min", `0px`);*/
+        this.con.style.setProperty("--min", `0px`); //*/
 
         this.trans = false;
         this.con.addEventListener("transitionend", () => {

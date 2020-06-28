@@ -26,6 +26,7 @@
 
     --trans:                    .1s;
     --trans-long:               .5s;
+    --trans-extra-long:         4s;
     --loader-spin:              .75s;
 }
 
@@ -59,6 +60,26 @@ app-main {
 
 t-dark {
     opacity: 0.6;
+}
+
+t-m {
+    color: var(--color-main);
+}
+
+t-s {
+    color: var(--color-secondary);
+}
+
+title-big {
+    font-family: "Main-Bold";
+    font-size: calc( var(--size-text) * 2 );
+    display: block;
+}
+
+title-medium {
+    font-family: "Main-Bold";
+    font-size: calc( var(--size-text) * 1.5 );
+    display: block;
 }
 
 * {
@@ -144,6 +165,9 @@ alert-close:hover {
     opacity: 1;
 }
 
+c-d {
+    opacity: .5;
+}
 
 loading-circle {
     border: var(--size-loader-thickness) solid rgba(0,0,0,0);
@@ -159,11 +183,20 @@ loading-circle {
     box-sizing: border-box;
 }
 
+loading-text {
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    color: #fff;
+    font-family: "Main";
+    font-size: calc( var(--size-text) * 1.5 );
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
 
 .svg {
     transform: translateY(+50%);

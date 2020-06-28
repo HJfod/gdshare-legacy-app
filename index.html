@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8"/>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'">
         <title>GDShare</title>
         <link rel="stylesheet" href="scripts/styles/main.css"/>
         <link rel="stylesheet" href="scripts/styles/titlebar.css"/>
@@ -18,7 +19,7 @@
     <body>
 
         <app-titlebar>
-            <text class="app-title">GDShare <t-dark>v1.0</t-dark></text>
+            <text class="app-title">GDShare <t-dark class="version-title">__VERSION</t-dark></text>
 
             <app-buffer></app-buffer>
 
@@ -30,7 +31,8 @@
         <app-main>
             
             <app-tabs>
-                <app-tab link="backup" default>Backups</app-tab>
+                <app-tab link="home" default>Home</app-tab>
+                <app-tab link="backup">Backups</app-tab>
                 <app-tab link="export">Export</app-tab>
                 <app-tab link="import">Import</app-tab>
                 <app-tab link="analyze">Analyze</app-tab>
@@ -39,74 +41,92 @@
 
             <app-content>
 
+                <app-page link="home">
+                    <home-screen>
+                        <welcome-message>Logged in as __PLAYERNAME</welcome-message>
+                        <w-small>UserID: __PLAYERID</w-small>
+
+                        <br>
+                        <roll-over>
+                            <roll-text>View stats</roll-text>
+                            <roll-content>
+                                <user-stats></user-stats>
+                            </roll-content>
+                        </roll-over>
+                    </home-screen>
+                </app-page>
+
                 <app-page link="backup">
-                    <select-menu menu="test-menu" size=4 options='[
-                        "Test 1",
-                        "Vamoose",
-                        "Counter Arguments",
-                        "Cool shit",
-                        "More options",
-                        "My balls are blue",
-                        "Roses are grey",
-                        "sdfjgfsdgd"
-                    ]'></select-menu>
+                    <!--<button>&#128932;</button>-->
 
-                    <button onclick="alert(global.allow ? document.querySelector('select-menu').getValue() : 'no you can NOT see that!')">get</button>
-                    <button onclick="splash({ type: 'loading' }); setTimeout(() => splash(`<c-h a='checkmark'></c-h><c-h a='crossmark'/>`), 3000)">alert</button>
+                    <select-menu menu="backup-menu" size=4 empty-text="Not implemented yet; Coming soon!"></select-menu>
 
-                    <check-box var="allow">This is a checkbox</check-box>
-                    <check-box>This is a checkbox</check-box>
-
-                    <search-box menu="test-menu"></search-box>
+                    <search-box menu="backup-menu"></search-box>
                 </app-page>
 
                 <app-page link="export">
-                    <text>Exports here</text>
+                    <select-menu id="level-list" multiple menu="export-menu" size=5 empty-text="No levels found."></select-menu>
+
+                    <search-box menu="export-menu"></search-box>
+
+                    <button id="export" onclick="GDShare.export()">Export selected</button>
+
+                    <button onclick="GDShare.selectExportPath()">Select path</button>
+
+                    <p id="export-path">No export path selected</p>
                 </app-page>
 
                 <app-page link="import">
-                    <text>Imports here</text>
+                    <input type="file" onchange="GDShare.imports = Array.from(this.files)"></input>
+
+                    <button id="import" onclick="GDShare.import()">Import selected</button>
+
+
                 </app-page>
 
                 <app-page link="analyze">
-                    <text>Level analysis here</text>
+                    <text>Coming soon!</text>
                 </app-page>
 
                 <app-page link="settings">
-                    <roll-over>
-                        <roll-text>Rollover this menu bro</roll-text>
-                        <roll-content>
-                            <text>wow this is text inside the rollover</text>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <p>jaja</p>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <p>jaja</p>
-                        </roll-content>
-                    </roll-over>
+                    <title-medium>Settings</title-medium>
 
                     <roll-over>
-                        <roll-text>Rollover this menu bro</roll-text>
+                        <roll-text>Help</roll-text>
                         <roll-content>
-                            <text>wow this is text inside the rollover</text>
+                            <text>Proper help dialogs will be implemented in the future.</text>
+                            
+                            <br><br>
+
+                            <text>As this is the development version, just DM <t-m>HJfod</t-m><t-s>#1795</t-s> for help.</text>
+
                             <br>
-                            <br>
-                            <p>jaja</p>
-                            <br>
-                            <br>
-                            <p>jaja</p>
+                        </roll-content>
+                    </roll-over>
+                    
+                    <roll-over>
+                        <roll-text>About</roll-text>
+                        <roll-content>
+                            <text><b>Developers:</b></text><br><br>
+                            <text><c-d></c-d> HJfod</text><br>
+                            <text><c-d></c-d> GDColon</text><br>
+                            <text><c-d></c-d> Mercury</text><br>
+                            <text><c-d></c-d> Simonoson</text><br><br>
+                            <text><b>Special thanks:</b></text><br><br>
+                            <text><c-d></c-d> SMJS</text><br>
+                            <text><c-d></c-d> Kyuuti</text><br><br>
+
+                            <hyper-link link="https://github.com/HJfod/gd-backup">Github page (original)</hyper-link>
+                            <c-d></c-d>
+                            <hyper-link link="https://github.com/HJfod/gdshare">Github page (new)</hyper-link>
+
+                            <br><br>
+
+                            <text id="version-text"><t-dark>Version: __VERSION</t-dark></text>
+
+                            <br><br>
+
+                            <hyper-link onclick='ipcSend({ action: "check-for-updates" })'>Check for updates</hyper-link>
                         </roll-content>
                     </roll-over>
                 </app-page>
@@ -121,6 +141,7 @@
                 <alert-content></alert-content>
             </alert-box>
             <loading-circle></loading-circle>
+            <loading-text></loading-text>
         </alert-area>
 
     </body>
