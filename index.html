@@ -15,6 +15,7 @@
         <script defer src="scripts/frontend/alert.js"></script>
         <script defer src="scripts/frontend/char.js"></script>
         <script defer src="scripts/frontend/rollover.js"></script>
+        <script defer src="scripts/frontend/finish.js"></script>
     </head>
     <body>
 
@@ -107,14 +108,30 @@
                     <roll-over>
                         <roll-text>About</roll-text>
                         <roll-content>
-                            <text><b>Developers:</b></text><br><br>
-                            <text><c-d></c-d> HJfod</text><br>
-                            <text><c-d></c-d> GDColon</text><br>
-                            <text><c-d></c-d> Mercury</text><br>
-                            <text><c-d></c-d> Simonoson</text><br><br>
-                            <text><b>Special thanks:</b></text><br><br>
-                            <text><c-d></c-d> SMJS</text><br>
-                            <text><c-d></c-d> Kyuuti</text><br><br>
+
+                            <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
+                                <roll-text>Developers</roll-text>
+                                <roll-content>
+                                    <dev-t i="HJfod">HJfod</dev-t>
+                                    <dev-t i="GDColon">GDColon</dev-t>
+                                    <dev-t i="Mercury">Mercury</dev-t>
+                                    <dev-t i="Simonoson">Simonoson</dev-t>
+
+                                    <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
+                                        <roll-text>Special thanks</roll-text>
+                                        <roll-content>
+                                            <text><c-d></c-d> SMJS, Kyuuti</text>
+                                        </roll-content>
+                                    </roll-over>
+                                </roll-content>
+                            </roll-over>
+
+                            <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
+                                <roll-text>Advanced settings</roll-text>
+                                <roll-content>
+                                    <check-box id="dev-toggle" var="devMode" ontoggle='ipcSend({ "action": "toggle-dev-mode", "mode": "__THISVAR" })'>Developer mode</check-box>
+                                </roll-content>
+                            </roll-over>
 
                             <hyper-link link="https://github.com/HJfod/gd-backup">Github page (original)</hyper-link>
                             <c-d></c-d>

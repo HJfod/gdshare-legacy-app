@@ -154,6 +154,10 @@ search-box:hover {
 
 
 
+roll-over {
+    display: block;
+}
+
 roll-text {
     display: block;
     user-select: none;
@@ -192,12 +196,23 @@ roll-text[rolled] ~ roll-content {
 }
 
 hyper-link {
-	cursor: pointer;
 	color: var(--color-main);
 	text-decoration: underline;
+    transition-duration: var(--trans);
 }
 
 hyper-link:hover {
 	color: var(--color-secondary);
+	cursor: pointer;
+}
+
+dev-t {
+    display: block;
     transition-duration: var(--trans);
+}
+
+dev-t:hover {
+	color: var(--color-main);
+	text-decoration: underline;
+	cursor: help;
 }

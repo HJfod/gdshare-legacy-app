@@ -1,4 +1,4 @@
-const { BrowserWindow, app, shell, dialog } = require("electron");
+const { BrowserWindow, app, shell, dialog, Menu } = require("electron");
 const ipc = require("electron").ipcMain;
 const path = require("path");
 const fs = require("fs");
@@ -16,7 +16,8 @@ let wMain;
 const global = {
 	GDdata: "",
 	GDlevels: [],
-	version: require('./package.json').version
+	version: require('./package.json').version,
+	production: require('./package.json').production
 }
 
 const dim = { w: 460, h: 550 };
@@ -38,7 +39,7 @@ app.on("ready", () => {
 
 	wMain.loadFile("index.html");
 
-	//wMain.setMenu(null);
+	wMain.setMenu(global.production ? null : Menu.buildFromTemplate(devMenu));
 
     wMain.on("closed", () => {
         app.quit();
@@ -129,10 +130,18 @@ ipc.on("app", (event, args) => {
 				}
 			});
 			break;
+		case "toggle-dev-mode":
+			if (args.mode === "true") {
+				wMain.setMenu(Menu.buildFromTemplate(devMenu));
+			} else {
+				wMain.setMenu(null);
+			}
+			break;
 		case "init":
 			post({ action: "init", obj: {
-				appVersion: `v${global.version} inDEV-1`,
-				appVersionNum: global.version
+				appVersion: `v${global.version} inDEV-2`,
+				appVersionNum: global.version,
+				production: global.production
 			} });
 
 			const gpath = GDShare.getCCPath();
@@ -176,3 +185,20 @@ ipc.on("app", (event, args) => {
 function post(msg) {
 	wMain.webContents.send("app", msg);
 }
+
+const devMenu = [
+	{
+		label: "File",
+		submenu: [
+			{ role: "quit" }
+		]
+	},
+	{
+		label: "Dev",
+		submenu: [
+			{ role: "reload" },
+			{ role: "forcereload" },
+			{ role: "toggledevtools" }
+		]
+	}
+];

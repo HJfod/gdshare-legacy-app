@@ -12,16 +12,31 @@ class CheckBox extends HTMLElement {
         }
     }
 
-    check() {
-        if (this.hasAttribute("checked")) {
-            this.removeAttribute("checked");
-            this.previousSibling.style.opacity = 0;
+    check(set = null) {
+        if (set === null) {
+            if (this.hasAttribute("checked")) {
+                this.removeAttribute("checked");
+                this.previousSibling.style.opacity = 0;
+            } else {
+                this.setAttribute("checked","");
+                this.previousSibling.style.opacity = 1;
+            }
         } else {
-            this.setAttribute("checked","");
-            this.previousSibling.style.opacity = 1;
+            if (set === true) {
+                this.setAttribute("checked","");
+                this.previousSibling.style.opacity = 1;
+            } else {
+                this.removeAttribute("checked");
+                this.previousSibling.style.opacity = 0;
+            }
         }
+
         if (this.hasAttribute("var")) {
             global[this.getAttribute("var")] = this.hasAttribute("checked");
+        }
+        if (this.hasAttribute("ontoggle")) {
+            const o = this.getAttribute("ontoggle");
+            window[o.split("(").shift()](o.substring(o.indexOf("(") + 1,o.lastIndexOf(")")).replace(/__THISVAR/g, global[this.getAttribute("var")]));
         }
     }
 }

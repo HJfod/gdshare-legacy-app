@@ -1,0 +1,1 @@
+ipcSend({ action: "init" });

@@ -6,6 +6,7 @@ function arr(list) {
 }
 
 function ipcSend(msg) {
+    if (typeof msg === "string") msg = JSON.parse(msg);
     window.postMessage({
         protocol: "to-app",
         data: msg
@@ -108,6 +109,7 @@ window.addEventListener("message", event => {
                 document.querySelector(".version-title").innerHTML = 
                 document.querySelector(".version-title").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
                 document.querySelector(".version-title").style.opacity = .4;
+                if (!args.obj.production) document.getElementById("dev-toggle").check(true);
         }
     }
 });
@@ -151,5 +153,3 @@ class HyperLink extends HTMLElement {
 }
 
 customElements.define("hyper-link", HyperLink);
-
-ipcSend({ action: "init" });
