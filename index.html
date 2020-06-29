@@ -4,17 +4,21 @@
         <meta charset="UTF-8"/>
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'">
         <title>GDShare</title>
+
         <link rel="stylesheet" href="scripts/styles/main.css"/>
         <link rel="stylesheet" href="scripts/styles/titlebar.css"/>
         <link rel="stylesheet" href="scripts/styles/content.css"/>
         <link rel="stylesheet" href="scripts/styles/elements.css"/>
+
+        <script defer src="scripts/frontend/gdshare-front.js"></script>
         <script defer src="scripts/frontend/main.js"></script>
-        <script defer src="scripts/frontend/tabs.js"></script>
-        <script defer src="scripts/frontend/select.js"></script>
-        <script defer src="scripts/frontend/checkbox.js"></script>
-        <script defer src="scripts/frontend/alert.js"></script>
-        <script defer src="scripts/frontend/char.js"></script>
-        <script defer src="scripts/frontend/rollover.js"></script>
+        <script defer src="scripts/frontend/elements/checkbox.js"></script>
+        <script defer src="scripts/frontend/elements/alert.js"></script>
+        <script defer src="scripts/frontend/elements/select.js"></script>
+        <script defer src="scripts/frontend/elements/tabs.js"></script>
+        <script defer src="scripts/frontend/elements/char.js"></script>
+        <script defer src="scripts/frontend/elements/rollover.js"></script>
+        <script defer src="scripts/frontend/elements/filedrop.js"></script>
         <script defer src="scripts/frontend/finish.js"></script>
     </head>
     <body>
@@ -78,7 +82,7 @@
                 </app-page>
 
                 <app-page link="import">
-                    <input type="file" onchange="GDShare.imports = Array.from(this.files)"></input>
+                    <drop-area text="Drop a file here or click to import!" multiple></drop-area>
 
                     <button id="import" onclick="GDShare.import()">Import selected</button>
 
@@ -91,6 +95,13 @@
 
                 <app-page link="settings">
                     <title-medium>Settings</title-medium>
+
+                    <roll-over>
+                        <roll-text>General settings</roll-text>
+                        <roll-content>
+                            <check-box var="displayFileTypes">Display file extentions</check-box>
+                        </roll-content>
+                    </roll-over>
 
                     <roll-over>
                         <roll-text>Help</roll-text>

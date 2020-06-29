@@ -85,7 +85,7 @@ tick-mark {
 
 
 
-input {
+input:not(input[type="file"]) {
     background-color: var(--color-light);
     width: calc( 100% - 4 * var(--size-pad) );
     padding-left: var(--size-pad);
@@ -100,7 +100,7 @@ input {
     transition-duration: var(--trans);
 }
 
-input:not(.search-input):hover {
+input:not(.search-input):not(input[type="file"]):hover {
     background-color: var(--color-lighter);
 }
 
@@ -215,4 +215,47 @@ dev-t:hover {
 	color: var(--color-main);
 	text-decoration: underline;
 	cursor: help;
+}
+
+
+
+drop-area {
+    background-color: var(--color-light);
+    width: calc( 100% - 4 * var(--size-pad) );
+    height: var(--size-file-drop);
+    padding: var(--size-pad);
+    display: block;
+    border-radius: var(--size-corner);
+    overflow: hidden;
+    text-align: center;
+    transition-duration: var(--trans);
+    user-select: none;
+}
+
+drop-area:hover {
+    background-color: var(--color-lighter);
+}
+
+.drop-input {
+    width: 100%;
+    height: 100%;
+    background-color: #f00;
+    opacity: 0;
+}
+
+drop-text {
+    position: absolute;
+    display: inline-flex;
+    width: calc( 100% - 6 * var(--size-pad) );
+    height: inherit;
+    line-height: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: .5;
+    transition-duration: var(--trans);
+}
+
+drop-area[has-files] drop-text {
+    opacity: 1;
 }

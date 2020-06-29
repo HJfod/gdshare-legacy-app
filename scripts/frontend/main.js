@@ -1,5 +1,8 @@
 const html = document.getElementsByTagName('html')[0];
-const global = {};
+const global = {
+    fileSuffix: ".gmd",
+    displayFileTypes: false
+};
 
 function arr(list) {
     return Array.prototype.slice.call(list);
@@ -31,41 +34,6 @@ function getCSS(v) {
         return Number(g);
     }
 }
-
-const GDShare = {
-    exportPath: "",
-    imports: "",
-    export(level = false) {
-        ipcSend({ 
-            action: "level-export",
-            from: false,
-            path: this.exportPath,
-            levels: level ? level : document.querySelector("#level-list").getValue()
-        });
-    },
-    import(level = false) {
-        const imp = []; 
-        this.imports.forEach(f => imp.push({ name: f.name, path: f.path.replace(/\\/g,"/") }));
-        
-        ipcSend({ 
-            action: "level-import",
-            to: false,
-            levels: imp
-        });
-    },
-    selectExportPath() {
-        ipcSend({
-            action: "select-path",
-            title: "Select export path",
-            dir: true,
-            returnCode: "export-path"
-        });
-    },
-    setExportPath(to) {
-        this.exportPath = to;
-        document.getElementById("export-path").innerHTML = to;
-    }
-};
 
 window.addEventListener("message", event => {
 	const message = event.data;
