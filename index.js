@@ -52,9 +52,11 @@ ipc.on("app", (event, args) => {
 		case "test":
 			post({ action: "test", msg: "game win" });
 			break;
+
 		case "app-mz":
 			wMain.minimize();
 			break;
+
 		case "app-fs":
 			if (wMain.isMaximized()){
 				wMain.unmaximize();
@@ -62,9 +64,11 @@ ipc.on("app", (event, args) => {
 				wMain.maximize();
 			}
 			break;
+
 		case "open-link":
 			shell.openExternal(args.link);
 			break;
+
 		case "level-export":
 			GDShare.exportLevel(args.levels, args.from ? args.from : global.GDlevels, args.path)
 			.then(info => {
@@ -74,6 +78,7 @@ ipc.on("app", (event, args) => {
 				post({ action: "info", msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err}`});
 			});
 			break;
+
 		case "level-import":
 			const to = args.to ? args.to : GDShare.getCCPath();
 			toData = args.to ? false : global.GDdata;
@@ -90,11 +95,23 @@ ipc.on("app", (event, args) => {
 			});
 			post({ action: "info", msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;Succesfully imported!`});
 			break;
+
+		case "level-get-info":
+			GDShare.getLevelInfo(args.name, args.from ? args.from : null)
+			.then(val => {
+				post({ action: "level-info", info: val, returnCode: args.returnCode ? args.returnCode : null });
+			})
+			.catch(err => {
+				post({ action: "info", msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err}` });
+			});
+			break;
+
 		case "select-path":
 			let pth = dialog.showOpenDialogSync({ title: args.title, properties: [args.dir ? "openDirectory" : ""] })
 			pth ? pth = pth[0].replace(/\\/g,"/") : pth = "";
 			post({ action: "path-selected", code: args.returnCode, path: pth });
 			break;
+
 		case "check-for-updates":
 			post({ action: "info", msg: { type: "loading", msg: "Checking for updates..." } });
 			UP.dog(global.version)
@@ -130,6 +147,7 @@ ipc.on("app", (event, args) => {
 				}
 			});
 			break;
+
 		case "toggle-dev-mode":
 			if (args.mode === "true") {
 				wMain.setMenu(Menu.buildFromTemplate(devMenu));
@@ -137,6 +155,7 @@ ipc.on("app", (event, args) => {
 				wMain.setMenu(null);
 			}
 			break;
+
 		case "init":
 			post({ action: "init", obj: {
 				appVersion: `v${global.version} inDEV-2`,

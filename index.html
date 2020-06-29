@@ -82,10 +82,11 @@
                 </app-page>
 
                 <app-page link="import">
-                    <drop-area text="Drop a file here or click to import!" multiple></drop-area>
+                    <drop-area text="Drop file(s) here or click to import!" multiple change="import"></drop-area>
 
-                    <button id="import" onclick="GDShare.import()">Import selected</button>
+                    <imported-levels>
 
+                    </imported-levels>
 
                 </app-page>
 

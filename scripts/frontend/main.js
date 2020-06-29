@@ -57,6 +57,34 @@ window.addEventListener("message", event => {
                         break;
                 }
                 break;
+            case "level-info":
+                if (args.returnCode) {
+                    if (args.returnCode.startsWith("import::")) {
+                        const l = document.getElementById(args.returnCode);
+
+                        const levelInfo = Object.keys(args.info).map(k => {
+                            if (!["Name", "Creator", "Description"].includes(k)) {
+                                return `${k.replace(/\$/g," ")}: ${args.info[k]}<br>`;
+                            } else {
+                                return "";
+                            }
+                        }).join("");
+
+                        l.querySelector("roll-over roll-text").innerHTML = l.getAttribute("levelName");
+                        l.querySelector("roll-over roll-content").innerHTML = `
+                            <text>${l.getAttribute("levelPath")}</text>
+                            <br>
+                            <h3>${args.info.Name} by ${args.info.Creator}</h3><br>
+                            <text><t-dark>${args.info.Description ? '"' + args.info.Description + '"' : "<i>No description provided</i>"}</t-dark></text>
+                            <br><br>
+                            <text>${levelInfo}</text>
+                            <br><br>
+                            <button onclick="GDShare.import({ name: ${l.getAttribute("levelName")}, path: ${l.getAttribute("levelPath")} })">Import</button>
+                            <button onclick="this.parentNode.parentNode.parentNode.remove()">\u2715</button>
+                        `;
+                    }    
+                }
+                break;
             case "player-data":
                 document.querySelector("welcome-message").innerHTML = document.querySelector("welcome-message").innerHTML
                     .replace(/__PLAYERNAME/g, args.data.name)

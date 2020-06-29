@@ -173,7 +173,6 @@ roll-text:hover {
 roll-text::before {
     content: "❯";
     display: inline-block;
-    color: var(--color-text);
     transition-duration: calc( var(--trans-long) / 2 );
     margin-right: var(--size-pad);
 }
@@ -188,11 +187,13 @@ roll-content {
     height: 0px;
     opacity: 0;
     display: block;
+    margin-bottom: 0px;
 }
 
 roll-text[rolled] ~ roll-content {
     height: var(--max);
     opacity: 1;
+    margin-bottom: 0px;
 }
 
 hyper-link {
@@ -258,4 +259,23 @@ drop-text {
 
 drop-area[has-files] drop-text {
     opacity: 1;
+}
+
+
+
+gmd-level {
+    background: var(--color-gradient);
+    color: var(--color-titlebar-text);
+    display: block;
+    width: calc( 100% - 4 * var(--size-pad) );
+    border-radius: var(--size-corner);
+    padding: var(--size-pad);
+}
+
+gmd-level roll-over {
+    margin-bottom: 0px;
+}
+
+gmd-level roll-over roll-text {
+    margin-bottom: 0px;
 }

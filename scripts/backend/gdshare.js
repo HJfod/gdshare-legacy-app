@@ -5,6 +5,7 @@ const path = require("path");
 const pako = require("pako");
 const fs = require("fs");
 const { performance } = require('perf_hooks');
+const fileExt = ".gmd";
 
 let dLoop = "";
 let dir;
@@ -228,7 +229,7 @@ function exportLevel(names, from, exportPath) {
     });
 }
 
-function getKey(lvl, key, type) {
+function getKey(lvl, key, type, legacy = false) {
     /**
      * @author HJfod
      * @param {String} lvl Level data
@@ -242,7 +243,7 @@ function getKey(lvl, key, type) {
         return lvl.split(`<k>${key}</k>`).pop().substring(0,100);
     }
     if (type){
-        return lvl.split(`<k>${key}</k><${type}>`).pop().substring(0,lvl.split(`<k>${key}</k><${type}>`).pop().indexOf(`</${type}>`));
+        return lvl.split(`<k>${key}</k><${type}>`).pop().substring(0,lvl.split(`<k>${key}</k><${type}>`).pop().indexOf(legacy ? `<` : `</${type}>`));
     }else{
         return lvl.split(`<k>${key}</k>`).pop().substring(0,lvl.split(`<k>${key}</k>`).pop().indexOf('>')).includes("t");
     }
@@ -291,47 +292,50 @@ function getLevelInfo(name, from = "") {
      * @returns {Object} error: String saying what went wrong, info: Info about the level
      */
 
-    let foundLevel;
-
-    if (from){      // name was a path
-        name = name.toLowerCase();
-        if (name.endsWith(")")) name = name.substring(0,name.length-4);
-        foundLevel = from.find(x => x.toLowerCase().includes(`<k>k2</k><s>${name}</s>`));
-    }else{
-        try { fs.accessSync(name) } catch(err) {
-            return { error: "Unable to access file." };
-        }
-        if ( !name.endsWith(appMain.appValues.extFile) ) return { error: "File is not a .gmd file." };
-        foundLevel = fs.readFileSync(name, 'utf8');
-    }
-
-    if (!foundLevel){
-        return { error: "Level not found." };
-    }else{
-        let time = getKey(foundLevel, "k80", "i");
-        let p = getKey(foundLevel, "k41", "i");
-        let song = getKey(foundLevel, "k8", "i");
-        let rev = getKey(foundLevel, "k46", "i");
-        let desc = decodeBase64(getKey(foundLevel, "k3", "s")).toString("utf8");
-        let copy = getKey(foundLevel, "k42", "i");
-
-        let levelInfo = {};
-        levelInfo["Name"] = getKey(foundLevel, "k2", "s");
-        levelInfo["Length"] = getKey(foundLevel, "k23", "i").replace(/^\s*$/,"Tiny").replace("1","Short").replace("2","Medium").replace("3","Long").replace("4","XL");
-        levelInfo["Creator"] = getKey(foundLevel, "k5", "s");
-        levelInfo["Version"] = getKey(foundLevel, "k16", "i");
-        levelInfo["Password"] = (p === "1") ? "Free to copy" : (p === "") ? "No copy" : p.substring(1);
-        levelInfo["Song"] = song ? replaceOfficialSongName(song) : getKey(foundLevel, "k45", "i");
-        levelInfo["Description"] = desc;
-        levelInfo["Object_count"] = getKey(foundLevel, "k48", "i");
-        levelInfo["Editor_time"] = time > 3600 ? (time/3600).toFixed(1) + "h" : (time/60).toFixed(1) + "m";
-        levelInfo["Verified"] = getKey(foundLevel, "k14", false);
-        levelInfo["Attempts"] = getKey(foundLevel, "k18", "i");
-        levelInfo["Revision"] = rev === "" ? "None" : rev;
-        levelInfo["Copied_from"] = copy === "" ? "None" : copy;
+    return new Promise((res, rej) => {
+        let foundLevel;
         
-        return { error: false, info: levelInfo };
-    }
+        if (from){
+            name = name.toLowerCase();
+            if (name.endsWith(")")) name = name.substring(0,name.length-4);
+            foundLevel = from.find(x => x.toLowerCase().includes(`<k>k2</k><s>${name}</s>`));
+        }else{      // name was a path
+            try { fs.accessSync(name) } catch(err) {
+                rej("Unable to access file.");
+            }
+            if ( !name.endsWith(fileExt) ) return { error: "File is not a .gmd file." };
+            foundLevel = fs.readFileSync(name, 'utf8');
+        }
+    
+        if (!foundLevel){
+            rej("Level not found.");
+        }else{
+            let time = getKey(foundLevel, "k80", "i", 1);
+            let p = getKey(foundLevel, "k41", "i", 1);
+            let song = getKey(foundLevel, "k8", "i", 1);
+            let rev = getKey(foundLevel, "k46", "i", 1);
+            let desc = decodeBase64(getKey(foundLevel, "k3", "s", 1)).toString("utf8");
+            let copy = getKey(foundLevel, "k42", "i", 1);
+    
+            let levelInfo = {};
+            levelInfo["Name"] = getKey(foundLevel, "k2", "s", 1);
+            levelInfo["Length"] = getKey(foundLevel, "k23", "i", 1).replace(/^\s*$/,"Tiny").replace("1","Short").replace("2","Medium").replace("3","Long").replace("4","XL");
+            levelInfo["Creator"] = getKey(foundLevel, "k5", "s", 1);
+            levelInfo["Version"] = getKey(foundLevel, "k16", "i", 1);
+            levelInfo["Password"] = (p === "1") ? "Free to copy" : (p === "") ? "No copy" : p.substring(1);
+            levelInfo["Song"] = song ? replaceOfficialSongName(song) : getKey(foundLevel, "k45", "i", 1);
+            levelInfo["Description"] = desc;
+            levelInfo["Object$count"] = getKey(foundLevel, "k48", "i", 1);
+            levelInfo["Editor$time"] = time > 3600 ? (time/3600).toFixed(1) + "h" : (time/60).toFixed(1) + "m";
+            levelInfo["Verified"] = getKey(foundLevel, "k14", false, 1);
+            levelInfo["Attempts"] = getKey(foundLevel, "k18", "i", 1);
+            levelInfo["Revision"] = rev === "" ? "None" : rev;
+            levelInfo["Copied$from"] = copy === "" ? "None" : copy;
+            
+            res(levelInfo);
+        }
+
+    });
 }
 
 function getDir() {
