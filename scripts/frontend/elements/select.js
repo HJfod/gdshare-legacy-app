@@ -23,6 +23,19 @@ class SelectMenu extends HTMLElement {
         o.innerHTML = value;
         o.classList.add("option");
         o.setAttribute("onclick", `this.parentNode.setValue(this)`);
+
+        if (this.hasAttribute("hover")) {
+            JSON.parse(this.getAttribute("hover")).forEach(h => {
+                if (h.type === "button") {
+                    const b = document.createElement("button");
+                    b.innerHTML = h.text;
+                    b.setAttribute("onclick", h.onclick);
+                    b.classList.add("option-hover");
+                    o.appendChild(b);
+                }
+            });
+        }
+
         this.appendChild(o);
     }
 
