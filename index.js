@@ -133,7 +133,7 @@ ipc.on("app", (event, args) => {
 				} else if (msg.status === "upper-to-date") {
 					post({ 
 						action: "info",
-						msg: `You are using a version (${msg.oldVer}) newer than last stable release (${mgs.newVer}).`
+						msg: `You are using a version (${msg.oldVer}) newer than last stable release (${msg.newVer}).`
 					});
 				}
 			})

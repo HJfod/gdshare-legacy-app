@@ -20,7 +20,7 @@ class RollOver extends HTMLElement {
         });
     }
 
-    roll() {
+    roll(force = null) {
         if (!this.trans) {
             if (this.txt.hasAttribute("rolled")) {
                 //this.con.style.setProperty("--max", `${this.con.offsetHeight}px`);
@@ -28,6 +28,10 @@ class RollOver extends HTMLElement {
                 this.txt.removeAttribute("rolled");
             } else {
                 this.txt.setAttribute("rolled","");
+            }
+
+            if (force !== null) {
+                force ? this.txt.setAttribute("rolled", "") : this.txt.removeAttribute("rolled");
             }
             
             this.trans = true;

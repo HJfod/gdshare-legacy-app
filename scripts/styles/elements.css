@@ -323,3 +323,25 @@ slider-text {
     margin-left: calc( var(--size-pad) / 2 );
     font-size: var(--size-text);
 }
+
+
+
+help-button {
+    background: var(--color-gradient);
+    color: var(--color-titlebar-text);
+    padding-left: var(--size-pad);
+    padding-right: var(--size-pad);
+    padding-top: calc( var(--size-pad) / 1.5 );
+    padding-bottom: calc( var(--size-pad) / 1.5 );
+    border-radius: var(--size-corner);
+    border: none;
+    transition-duration: var(--trans);
+    font-size: var(--size-text);
+    user-select: none;
+    opacity: .75;
+}
+
+help-button:hover {
+    background-color: var(--color-secondary);
+    opacity: 1;
+}

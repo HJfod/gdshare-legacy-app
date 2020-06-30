@@ -8,13 +8,16 @@ function dog(appv) {
                 'User-Agent': 'request'
             }
         }
+
         https.get(o, res => {
             if (res.statusCode !== 200){
+                console.log("HTTPS request failed" + res.statusCode);
                 reject({ error: "not-200", code: res.statusCode });
             } else {
                 let rawData = '';
                 res.on('data', chunk => rawData += chunk );
                 res.on('end', () => {
+                    console.log("HTTPS result received");
                     try {
                         const parsedData = JSON.parse(rawData);
                         let newv = parsedData.tag_name.replace("v","");

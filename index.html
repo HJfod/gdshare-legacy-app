@@ -19,6 +19,7 @@
         <script defer src="scripts/frontend/elements/char.js"></script>
         <script defer src="scripts/frontend/elements/rollover.js"></script>
         <script defer src="scripts/frontend/elements/filedrop.js"></script>
+        <script defer src="scripts/frontend/elements/help.js"></script>
         <script defer src="scripts/frontend/finish.js"></script>
     </head>
     <body>
@@ -36,12 +37,14 @@
         <app-main>
             
             <app-tabs>
+                <tab-buffer></tab-buffer>
                 <app-tab link="home" default>Home</app-tab>
                 <app-tab link="backup">Backups</app-tab>
                 <app-tab link="export">Export</app-tab>
                 <app-tab link="import">Import</app-tab>
                 <app-tab link="analyze">Analyze</app-tab>
                 <app-tab link="settings">Settings</app-tab>
+                <app-tab link="help" id="help-tab" style="display: none;" removeOnDeselect>Help</app-tab>
             </app-tabs>
 
             <app-content>
@@ -78,6 +81,8 @@
 
                     <button onclick="GDShare.selectExportPath()">Select path</button>
 
+                    <help-button help="export"></help-button>
+
                     <p id="export-path">No export path selected</p>
                 </app-page>
 
@@ -108,11 +113,12 @@
                     <roll-over>
                         <roll-text>Help</roll-text>
                         <roll-content>
-                            <text>Proper help dialogs will be implemented in the future.</text>
+                            <br>
+                            <help-button text="Open help"></help-button>
                             
                             <br><br>
 
-                            <text>As this is the development version, just DM <t-m>HJfod</t-m><t-s>#1795</t-s> for help.</text>
+                            <text>If you need specific assistance or have encountered a bug, please DM <t-m>HJfod</t-m><t-s>#1795</t-s> on Discord.</text>
 
                             <br>
                         </roll-content>
@@ -159,6 +165,24 @@
                             <hyper-link onclick='ipcSend({ action: "check-for-updates" })'>Check for updates</hyper-link>
                         </roll-content>
                     </roll-over>
+                </app-page>
+
+                <app-page link="help" id="help-page">
+
+                    <roll-over help="export">
+                        <roll-text>Exporting levels</roll-text>
+                        <roll-content>
+                            <text>Select the level(s) you want exported from the list, then select the path and then <t-s>Export Selected</t-s>.</text>
+                        </roll-content>
+                    </roll-over>
+
+                    <roll-over help="import">
+                        <roll-text>Importing levels</roll-text>
+                        <roll-content>
+
+                        </roll-content>
+                    </roll-over>
+
                 </app-page>
 
             </app-content>

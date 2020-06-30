@@ -21,9 +21,12 @@ class AppTab extends HTMLElement {
             }
         });
 
+        arr(document.querySelectorAll("[removeOnDeselect]")).forEach(i => { if (i !== this) i.style.display = "none" });
+
         if (document.querySelector(".selected-tab")) {
             document.querySelector(".selected-tab").classList.remove("selected-tab");
         }
+
         this.classList.add("selected-tab");
     }
 }
