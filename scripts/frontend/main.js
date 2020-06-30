@@ -77,10 +77,15 @@ window.addEventListener("message", event => {
                             <h3>${args.info.Name} by ${args.info.Creator}</h3><br>
                             <text><t-dark>${args.info.Description ? '"' + args.info.Description + '"' : "<i>No description provided</i>"}</t-dark></text>
                             <br><br>
-                            <text>${levelInfo}</text>
+                            <roll-over>
+                                <roll-text>View level info</roll-text>
+                                <roll-content>
+                                    <text>${levelInfo}</text>
+                                </roll-content>
+                            </roll-over>
                             <br><br>
-                            <button onclick="GDShare.import({ name: ${l.getAttribute("levelName")}, path: ${l.getAttribute("levelPath")} })">Import</button>
-                            <button onclick="this.parentNode.parentNode.parentNode.remove()">\u2715</button>
+                            <button onclick="GDShare.import({ name: '${l.getAttribute('levelName')}', path: '${l.getAttribute('levelPath')}' }, 'remove-import::${args.returnCode}' )">Import</button>
+                            <button onclick="this.parentNode.parentNode.parentNode.remove()">Close</button>
                         `;
                     }    
                 }
@@ -106,6 +111,15 @@ window.addEventListener("message", event => {
                 document.querySelector(".version-title").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
                 document.querySelector(".version-title").style.opacity = .4;
                 if (!args.obj.production) document.getElementById("dev-toggle").check(true);
+                break;
+            case "returnCode":
+                switch (args.code.split("::").shift()) {
+                    case "remove-import":
+                        console.log(args.code);
+                        document.getElementById(args.code.substring(args.code.split("::").shift().length + 2)).remove();
+                        break;
+                }
+                break;
         }
     }
 });
@@ -134,6 +148,10 @@ function splash(message) {
     }
 }
 
+function reScaleApp(s) {
+    html.style.setProperty("--scale", s);
+}
+
 class HyperLink extends HTMLElement {
     constructor() {
         super();
@@ -148,4 +166,38 @@ class HyperLink extends HTMLElement {
     }
 }
 
+class CoolSlider extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        const i = document.createElement("input");
+        i.setAttribute("type", "range");
+        i.setAttribute("min", this.getAttribute("min"));
+        i.setAttribute("max", this.getAttribute("max"));
+        i.setAttribute("step", this.getAttribute("inc"));
+        i.value = this.getAttribute("val");
+        this.appendChild(i);
+
+        const t = document.createElement("slider-text");
+        t.innerHTML = this.hasAttribute("valtype") ? i.value + this.getAttribute("valtype") : i.value;
+        this.appendChild(t);
+
+        i.addEventListener("input", () => {
+            t.innerHTML = this.hasAttribute("valtype") ? i.value + this.getAttribute("valtype") : i.value;
+        });
+
+        if (this.hasAttribute("onrelease")) {
+            i.setAttribute("onmouseup", this.getAttribute("onrelease"));
+        }
+    }
+
+    setValue(val) {
+        this.children[0].value = val;
+        this.children[1].innerHTML = this.hasAttribute("valtype") ? i.value + this.getAttribute("valtype") : i.value;
+    }
+}
+
 customElements.define("hyper-link", HyperLink);
+customElements.define("cool-slider", CoolSlider);

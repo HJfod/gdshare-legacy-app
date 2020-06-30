@@ -82,9 +82,9 @@
                 </app-page>
 
                 <app-page link="import">
-                    <drop-area text="Drop file(s) here or click to import!" multiple change="import"></drop-area>
 
                     <imported-levels>
+                        <drop-area text="Drop file(s) here or click to import!" multiple change="import"></drop-area>
 
                     </imported-levels>
 
@@ -98,9 +98,10 @@
                     <title-medium>Settings</title-medium>
 
                     <roll-over>
-                        <roll-text>General settings</roll-text>
+                        <roll-text>Display</roll-text>
                         <roll-content>
-                            <check-box var="displayFileTypes">Display file extentions</check-box>
+                            <p>App scale:</p>
+                            <cool-slider max="2" min="0.5" val="1" inc=".25" onrelease="reScaleApp(this.value)" valtype="x"></cool-slider>
                         </roll-content>
                     </roll-over>
 

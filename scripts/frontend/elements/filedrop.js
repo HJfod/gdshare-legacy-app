@@ -28,7 +28,7 @@ class fileInput extends HTMLElement {
 
                             l.setAttribute("id", `import::${f.name}`);
                             l.setAttribute("levelName", f.name);
-                            l.setAttribute("levelPath", f.path);
+                            l.setAttribute("levelPath", f.path.replace(/\\/g,"/"));
 
                             ipcSend({ action: "level-get-info", name: f.path, returnCode: `import::${f.name}` });
 
@@ -78,5 +78,28 @@ class GMDLevel extends HTMLElement {
     }
 }
 
+class ImportedLevels extends HTMLElement {
+    constructor() {
+        super();
+    }
+
+    connectedCallback() {
+        const observer = new MutationObserver((mList, obs) => {
+            mList.forEach(m => {
+                if (m.type === "childList") {
+                    if (this.children.length > 1) {
+                        this.setAttribute("has-content", "");
+                    } else {
+                        this.removeAttribute("has-content");
+                    }
+                }
+            });
+        });
+
+        observer.observe(this, { attributes: false, childList: true, subtree: true });
+    }
+}
+
 customElements.define("drop-area", fileInput);
 customElements.define("gmd-level", GMDLevel);
+customElements.define("imported-levels", ImportedLevels);

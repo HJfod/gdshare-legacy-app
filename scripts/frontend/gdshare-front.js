@@ -9,11 +9,12 @@ const GDShare = {
             levels: level ? level : document.querySelector("#level-list").getValue()
         });
     },
-    import(level) {        
+    import(level, returnCode = null) {        
         ipcSend({ 
             action: "level-import",
             to: false,
-            levels: level
+            levels: Array.isArray(level) ? level : [level],
+            returnCode: returnCode
         });
     },
     selectExportPath() {

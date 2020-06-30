@@ -12,19 +12,22 @@
     --color-text:               #fff;
     --color-shadow:             rgba(0,0,0,.5);
 
-    --size-titlebar:            30px;
-    --size-pad:                 15px;
-    --size-tab:                 40px;
-    --size-buffer:              8px;
-    --size-option:              35px;
-    --size-corner:              10px;
-    --size-text:                14px;
-    --size-shadow:              20px;
+    --scale:                    1;
+
+    --size-titlebar:            calc( 30px * var(--scale) );
+    --size-pad:                 calc( 15px * var(--scale) );
+    --size-tab:                 calc( 40px * var(--scale) );
+    --size-buffer:              calc( 8px  * var(--scale) );
+    --size-option:              calc( 35px * var(--scale) );
+    --size-corner:              calc( 10px * var(--scale) );
+    --size-text:                calc( 14px * var(--scale) );
+    --size-shadow:              calc( 20px * var(--scale) );
     --size-popup-default:       30%;
-    --size-svg:                 24px;
+    --size-svg:                 calc( 24px * var(--scale) );
     --size-loader-radius:       75px;
     --size-loader-thickness:    12px;
     --size-file-drop:           150px;
+    --size-file-drop-small:     30px;
 
     --trans:                    .1s;
     --trans-long:               .5s;

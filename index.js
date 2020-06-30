@@ -88,6 +88,10 @@ ipc.on("app", (event, args) => {
 				.then(res => {
 					global.GDlevels.push({ name: GDShare.getKey(res.levelData, "k2", "s"), data: res.levelData, index: global.GDlevels.length });
 					global.GDdata = res.newData;
+
+					if (args.returnCode) {
+						post({ action: "returnCode", code: args.returnCode });
+					}
 				})
 				.catch(err => {
 					post({ action: "info", msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err}`});

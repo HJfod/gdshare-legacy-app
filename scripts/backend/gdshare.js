@@ -160,7 +160,8 @@ function decodeCCFile(path) {
 
             res(saveData);
         } else {
-            rej("Save data appears to be corrupt.")
+            console.log(`skipped decode`);
+            res(saveData);
         }
     });
 }

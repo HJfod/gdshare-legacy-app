@@ -85,7 +85,7 @@ tick-mark {
 
 
 
-input:not(input[type="file"]) {
+input:not(input[type]) {
     background-color: var(--color-light);
     width: calc( 100% - 4 * var(--size-pad) );
     padding-left: var(--size-pad);
@@ -100,7 +100,7 @@ input:not(input[type="file"]) {
     transition-duration: var(--trans);
 }
 
-input:not(.search-input):not(input[type="file"]):hover {
+input:not(.search-input):not(input[type]):hover {
     background-color: var(--color-lighter);
 }
 
@@ -254,11 +254,14 @@ drop-text {
     align-items: center;
     text-align: center;
     opacity: .5;
-    transition-duration: var(--trans);
 }
 
 drop-area[has-files] drop-text {
     opacity: 1;
+}
+
+imported-levels[has-content] drop-area {
+    height: var(--size-file-drop-small);
 }
 
 
@@ -278,4 +281,45 @@ gmd-level roll-over {
 
 gmd-level roll-over roll-text {
     margin-bottom: 0px;
+}
+
+
+
+cool-slider {
+    width: calc( 100% - 2 * var(--size-pad) );
+    display: block;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 85%;
+    height: var(--size-text);
+    background: var(--color-light);
+    transition-duration: var(--trans);
+    border-radius: calc( var(--size-corner) / 2 );
+}
+
+input[type="range"]:hover {
+    background: var(--color-lighter);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: calc( var(--size-text) * 1.5 );
+    height: calc( var(--size-text) * 1.5 );
+    background: var(--color-main);
+    cursor: pointer;
+    transition-duration: var(--trans);
+    border-radius: calc( var(--size-corner) / 2 );
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--color-secondary);
+}
+
+slider-text {
+    margin-left: calc( var(--size-pad) / 2 );
+    font-size: var(--size-text);
 }
