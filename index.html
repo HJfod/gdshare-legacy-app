@@ -74,7 +74,7 @@
 
                 <app-page link="export">
                     <select-menu id="level-list" multiple menu="export-menu" size=5 empty-text="No levels found." hover='[
-                        { "type": "button", "text": "View", "onclick": "GDShare.view(this.parentNode.innerHTML)" }
+                        { "type": "button", "text": "View", "onclick": "GDShare.view(this.parentNode.querySelector(\"o-text\").innerHTML)" }
                     ]'></select-menu>
 
                     <search-box menu="export-menu"></search-box>

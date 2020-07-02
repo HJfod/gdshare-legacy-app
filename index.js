@@ -17,7 +17,8 @@ const global = {
 	GDdata: "",
 	GDlevels: [],
 	version: require('./package.json').version,
-	production: require('./package.json').production
+	production: require('./package.json').production,
+	largeFileSize: 20
 }
 
 const dim = { w: 460, h: 550 };
@@ -31,7 +32,7 @@ const windowSettings = {
 		nodeIntegration: false, 
 		enableRemoteModule: false, 
 		contextIsolation: true
-	} 
+	}
 };
 
 app.on("ready", () => {
@@ -101,7 +102,15 @@ ipc.on("app", (event, args) => {
 			break;
 
 		case "level-get-info":
-			GDShare.getLevelInfo(args.name, args.from ? args.from : null)
+			const check = () => { switch (args.from) {
+				case "default":
+					return global.GDlevels;
+				default:
+					return null;
+			} };
+			const from = check();
+
+			GDShare.getLevelInfo(args.name, from)
 			.then(val => {
 				post({ action: "level-info", info: val, returnCode: args.returnCode ? args.returnCode : null });
 			})
@@ -170,7 +179,7 @@ ipc.on("app", (event, args) => {
 			const gpath = GDShare.getCCPath();
 			const cpath = GDShare.getCCPath("gm");
 			
-			post({ action: "info", msg: { type: "loading", msg: "Loading user data..." } });
+			post({ action: "info", msg: { type: "loading", msg: `Loading user data...${(fs.statSync(cpath).size / 1000000) > global.largeFileSize ? "<br>(This may take a while)" : ""}` } });
 
 			GDShare.decodeCCFile(cpath)
 			.then(udata => {
@@ -178,7 +187,7 @@ ipc.on("app", (event, args) => {
 				global.uInfo = uinfo;
 				post({ action: "player-data", data: uinfo });
 
-				post({ action: "info", msg: { type: "loading", msg: "Loading levels...<br>(This may take a while)" } });
+				post({ action: "info", msg: { type: "loading", msg: `Loading levels...${(fs.statSync(gpath).size / 1000000) > global.largeFileSize ? "<br>(This may take a while)" : ""}` } });
 				
 				GDShare.decodeCCFile(gpath)
 				.then(leveldata => {

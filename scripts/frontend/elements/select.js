@@ -20,7 +20,7 @@ class SelectMenu extends HTMLElement {
 
     addOption(value) {
         const o = document.createElement("button");
-        o.innerHTML = value;
+        o.innerHTML = `<o-text>${value}</o-text>`;
         o.classList.add("option");
         o.setAttribute("onclick", `this.parentNode.setValue(this)`);
 
@@ -30,6 +30,7 @@ class SelectMenu extends HTMLElement {
                     const b = document.createElement("button");
                     b.innerHTML = h.text;
                     b.setAttribute("onclick", h.onclick);
+                    b.addEventListener("click", e => e.stopPropagation());
                     b.classList.add("option-hover");
                     o.appendChild(b);
                 }
@@ -41,7 +42,7 @@ class SelectMenu extends HTMLElement {
 
     getValue() {
         let a = [];
-        arr(this.querySelectorAll(".o-selected")).forEach(o => a.push(o.innerHTML));
+        arr(this.querySelectorAll(".o-selected")).forEach(o => a.push(o.querySelector("o-text").innerHTML));
         return a;
     }
 

@@ -23,6 +23,7 @@ select-info {
     border: none;
     margin-bottom: calc( var(--size-buffer) / 2 );
     font-size: var(--size-text);
+    text-align: center;
 }
 
 .o-selected {
@@ -35,6 +36,28 @@ select-info {
 
 .o-selected:hover {
     background-color: var(--color-secondary);
+}
+
+.option-hover {
+    background-color: var(--color-dark);
+    border-radius: calc( var(--size-corner) / 2 );
+    color: var(--color-text);
+    border: none;
+    float: right;
+    margin: 0px;
+    margin-right: calc( var(--size-pad) / 2 );
+    opacity: 0;
+    display: none;
+    transition-duration: var(--trans);
+}
+
+.option-hover:hover {
+    background-color: var(--color-light);
+}
+
+.option:hover .option-hover {
+    opacity: 1;
+    display: initial;
 }
 
 

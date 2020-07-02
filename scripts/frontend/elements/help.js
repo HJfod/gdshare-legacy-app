@@ -4,7 +4,7 @@ class HelpButton extends HTMLElement {
     }
 
     connectedCallback() {
-        this.innerHTML = this.hasAttribute("text") ? this.getAttribute("text") : "<b>Help</b>";
+        this.innerHTML = this.hasAttribute("text") ? this.getAttribute("text") : "<b><i>Help</i></b>";
 
         this.addEventListener("click", () => {
             document.querySelector('#help-tab').style.display = "initial";

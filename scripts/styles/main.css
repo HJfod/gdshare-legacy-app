@@ -134,7 +134,6 @@ alert-box {
     color: var(--color-text);
     box-shadow: 0px 0px var(--size-shadow) var(--color-shadow);
     width: calc( var(--size-popup-default) * 2 );
-    height: var(--size-popup-default);
     left: 50%;
     top: 50%;
     padding: var(--size-pad);
@@ -145,9 +144,6 @@ alert-box {
 
 alert-content {
     padding: var(--size-pad);
-    position: absolute;
-    width: calc( 100% - var(--size-pad) * 4 );
-    height: calc( 100% - var(--size-pad) * 4 );
 }
 
 alert-close {

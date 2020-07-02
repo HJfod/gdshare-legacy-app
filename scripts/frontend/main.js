@@ -87,7 +87,28 @@ window.addEventListener("message", event => {
                             <button onclick="GDShare.import({ name: '${l.getAttribute('levelName')}', path: '${l.getAttribute('levelPath')}' }, 'remove-import::${args.returnCode}' )">Import</button>
                             <button onclick="this.parentNode.parentNode.parentNode.remove()">Close</button>
                         `;
-                    }    
+                    } else if (args.returnCode.startsWith("export::")) {
+
+                        const levelInfo = Object.keys(args.info).map(k => {
+                            if (!["Name", "Creator", "Description"].includes(k)) {
+                                return `${k.replace(/\$/g," ")}: ${args.info[k]}<br>`;
+                            } else {
+                                return "";
+                            }
+                        }).join("");
+
+                        splash(`
+                        <h3>${args.info.Name} by ${args.info.Creator}</h3><br>
+                        <text><t-dark>${args.info.Description ? '"' + args.info.Description + '"' : "<i>No description provided</i>"}</t-dark></text>
+                        <br><br>
+                        <roll-over>
+                            <roll-text>View level info</roll-text>
+                            <roll-content>
+                                <text>${levelInfo}</text>
+                            </roll-content>
+                        </roll-over>
+                        `);
+                    }
                 }
                 break;
             case "player-data":
