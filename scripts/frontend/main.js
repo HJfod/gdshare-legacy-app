@@ -1,7 +1,8 @@
 const html = document.getElementsByTagName('html')[0];
 const global = {
     fileSuffix: ".gmd",
-    displayFileTypes: false
+    displayFileTypes: false,
+    showDevFeatures: false
 };
 
 function arr(list) {
@@ -35,6 +36,23 @@ function getCSS(v) {
     }
 }
 
+function setInputFilter(textbox, inputFilter) {     // thanks stackoverflow
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+      textbox.addEventListener(event, function() {
+        if (inputFilter(this.value)) {
+          this.oldValue = this.value;
+          this.oldSelectionStart = this.selectionStart;
+          this.oldSelectionEnd = this.selectionEnd;
+        } else if (this.hasOwnProperty("oldValue")) {
+          this.value = this.oldValue;
+          this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+        } else {
+          this.value = "";
+        }
+      });
+    });
+  }
+
 window.addEventListener("message", event => {
 	const message = event.data;
     if (message.protocol === "from-app") {
@@ -43,13 +61,17 @@ window.addEventListener("message", event => {
             case "test":
                 alert(args.msg);
                 break;
+
             case "info":
                 splash(args.msg);
                 break;
+
             case "level-list":
+                document.getElementById("level-list").clear();
                 args.levels.forEach(l => document.getElementById("level-list").addOption(l.name));
                 document.getElementById("level-list").search("");
                 break;
+
             case "path-selected":
                 switch (args.code) {
                     case "export-path":
@@ -57,6 +79,7 @@ window.addEventListener("message", event => {
                         break;
                 }
                 break;
+
             case "level-info":
                 if (args.returnCode) {
                     if (args.returnCode.startsWith("import::")) {
@@ -111,6 +134,11 @@ window.addEventListener("message", event => {
                     }
                 }
                 break;
+
+            case "switch-theme":
+                switchTheme(args.data);
+                break;
+
             case "player-data":
                 document.querySelector("welcome-message").innerHTML = document.querySelector("welcome-message").innerHTML
                     .replace(/__PLAYERNAME/g, args.data.name)
@@ -125,6 +153,7 @@ window.addEventListener("message", event => {
 
                 document.querySelector("home-screen").style.opacity = 1;
                 break;
+
             case "init":
                 document.getElementById("version-text").innerHTML = 
                 document.getElementById("version-text").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
@@ -171,6 +200,16 @@ function splash(message) {
 
 function reScaleApp(s) {
     html.style.setProperty("--scale", s);
+}
+
+function switchTheme(to) {
+    to.split("\n").forEach(l => {
+        const v = l.split(":").shift();
+        const t = l.split(":").pop().trim();
+
+        html.style.setProperty(`--color-${v}`, t);
+        console.log(`--color-${v}: ${t}`);
+    });
 }
 
 class HyperLink extends HTMLElement {
@@ -222,3 +261,5 @@ class CoolSlider extends HTMLElement {
 
 customElements.define("hyper-link", HyperLink);
 customElements.define("cool-slider", CoolSlider);
+
+setInputFilter(document.getElementById("analyze-id-input"), val => /^\d{0,8}$/.test(val));

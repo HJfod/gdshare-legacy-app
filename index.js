@@ -21,7 +21,7 @@ const global = {
 	largeFileSize: 20
 }
 
-const dim = { w: 460, h: 550 };
+const dim = { w: 440, h: 550 };
 const windowSettings = {
     frame: false, 
 	icon: path.join(__dirname,"resources/share.ico"), 
@@ -34,6 +34,13 @@ const windowSettings = {
 		contextIsolation: true
 	}
 };
+
+const requiredDir = ["data","data/themes"];
+requiredDir.forEach(dir => {
+	if (!fs.existsSync(dir)) {
+		fs.mkdirSync(dir);
+	}
+});
 
 app.on("ready", () => {
     wMain = new BrowserWindow(windowSettings);
@@ -70,7 +77,14 @@ ipc.on("app", (event, args) => {
 			shell.openExternal(args.link);
 			break;
 
+		case "switch-theme":
+			const d = fs.readFileSync(`data/themes/${args.to}.gdst`, "utf-8");
+			post({ action: "switch-theme", data: d });
+			break;
+
 		case "level-export":
+			post({ action: "info", msg: { type: "loading", msg: `Exporting level...` } });
+
 			GDShare.exportLevel(args.levels, args.from ? args.from : global.GDlevels, args.path)
 			.then(info => {
 				post({ action: "info", msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;${info}`});
@@ -81,24 +95,29 @@ ipc.on("app", (event, args) => {
 			break;
 
 		case "level-import":
+			post({ action: "info", msg: { type: "loading", msg: `Importing level...` } });
+
 			const to = args.to ? args.to : GDShare.getCCPath();
 			toData = args.to ? false : global.GDdata;
 
 			args.levels.forEach(lvl => {
 				GDShare.importLevel(lvl.path, to, toData)
 				.then(res => {
-					global.GDlevels.push({ name: GDShare.getKey(res.levelData, "k2", "s"), data: res.levelData, index: global.GDlevels.length });
+					global.GDlevels.unshift({ name: GDShare.getKey(res.levelData, "k2", "s"), data: res.levelData, index: global.GDlevels.length });
 					global.GDdata = res.newData;
+
+					post({ action: "level-list", levels: global.GDlevels });
 
 					if (args.returnCode) {
 						post({ action: "returnCode", code: args.returnCode });
 					}
+
+					post({ action: "info", msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;Succesfully imported!`});
 				})
 				.catch(err => {
 					post({ action: "info", msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err}`});
 				});
 			});
-			post({ action: "info", msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;Succesfully imported!`});
 			break;
 
 		case "level-get-info":

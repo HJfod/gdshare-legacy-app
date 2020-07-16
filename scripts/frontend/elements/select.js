@@ -39,6 +39,10 @@ class SelectMenu extends HTMLElement {
 
         this.appendChild(o);
     }
+    
+    clear() {
+        arr(this.querySelectorAll("button")).forEach(x => x.remove());
+    }
 
     getValue() {
         let a = [];

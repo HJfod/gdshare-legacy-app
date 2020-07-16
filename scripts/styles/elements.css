@@ -108,7 +108,7 @@ tick-mark {
 
 
 
-input:not(input[type]) {
+input:not(.search-input):not([type]) {
     background-color: var(--color-light);
     width: calc( 100% - 4 * var(--size-pad) );
     padding-left: var(--size-pad);
@@ -123,7 +123,7 @@ input:not(input[type]) {
     transition-duration: var(--trans);
 }
 
-input:not(.search-input):not(input[type]):hover {
+input:not(.search-input):not([type]):hover {
     background-color: var(--color-lighter);
 }
 

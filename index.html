@@ -42,7 +42,7 @@
                 <app-tab link="backup">Backups</app-tab>
                 <app-tab link="export">Export</app-tab>
                 <app-tab link="import">Import</app-tab>
-                <app-tab link="analyze">Analyze</app-tab>
+                <app-tab link="analyze" toggle-var="showDevFeatures">Analyze</app-tab>
                 <app-tab link="settings">Settings</app-tab>
                 <app-tab link="help" id="help-tab" style="display: none;" removeOnDeselect>Help</app-tab>
             </app-tabs>
@@ -89,6 +89,10 @@
                 </app-page>
 
                 <app-page link="import">
+                    
+                    <br>
+                    <help-button help="import"></help-button>
+                    <br><br>
 
                     <imported-levels>
                         <drop-area text="Drop file(s) here or click to import!" multiple change="import"></drop-area>
@@ -98,7 +102,14 @@
                 </app-page>
 
                 <app-page link="analyze">
-                    <text>Coming soon!</text>
+
+                    <input id="analyze-id-input" placeholder="Type a GD level ID"></input>
+                    <button>Add</button>
+                    
+                    <imported-levels>
+                        <drop-area text="Drop file(s) here or click to analyze!" multiple change="analyze"></drop-area>
+                    </imported-levels>
+
                 </app-page>
 
                 <app-page link="settings">
@@ -107,6 +118,12 @@
                     <roll-over>
                         <roll-text>Display</roll-text>
                         <roll-content>
+                            <p>Theme:</p>
+                            <button onclick='ipcSend({ "action": "switch-theme", "to": "amoled" })'>🌑</button>
+                            <button onclick='ipcSend({ "action": "switch-theme", "to": "dark" })'>🌙</button>
+                            <button onclick='ipcSend({ "action": "switch-theme", "to": "mid" })'>🌟</button>
+                            <button onclick='ipcSend({ "action": "switch-theme", "to": "light" })'>☀️</button>
+
                             <p>App scale:</p>
                             <cool-slider max="2" min="0.5" val="1" inc=".25" onrelease="reScaleApp(this.value)" valtype="x"></cool-slider>
                         </roll-content>
@@ -151,6 +168,7 @@
                                 <roll-text>Advanced settings</roll-text>
                                 <roll-content>
                                     <check-box id="dev-toggle" var="devMode" ontoggle='ipcSend({ "action": "toggle-dev-mode", "mode": "__THISVAR" })'>Developer mode</check-box>
+                                    <check-box var="showDevFeatures">Show indev features</check-box>
                                 </roll-content>
                             </roll-over>
 
