@@ -66,6 +66,10 @@ window.addEventListener("message", event => {
                 splash(args.msg);
                 break;
 
+            case "click":
+                document.querySelector(args.obj).click();
+                break;
+
             case "level-list":
                 document.getElementById("level-list").clear();
                 args.levels.forEach(l => document.getElementById("level-list").addOption(l.name));
@@ -83,7 +87,26 @@ window.addEventListener("message", event => {
             case "level-info":
                 if (args.returnCode) {
                     if (args.returnCode.startsWith("import::")) {
-                        const l = document.getElementById(args.returnCode);
+                        let l;
+                        if (args.returnCode === "import::__EXAMPLE") {
+                            l = document.createElement("gmd-level");
+                            const r = document.createElement("roll-over");
+                            const t = document.createElement("roll-text");
+                            const c = document.createElement("roll-content");
+
+                            l.setAttribute("levelName", "Example Level");
+                            l.setAttribute("levelPath", "C:/Windows/System32");
+                            l.setAttribute("id", "import-example")
+
+                            r.appendChild(t);
+                            r.appendChild(c);
+
+                            l.appendChild(r);
+
+                            document.querySelector("imported-levels").appendChild(l);
+                        } else {
+                            l = document.getElementById(args.returnCode);
+                        }
 
                         const levelInfo = Object.keys(args.info).map(k => {
                             if (!["Name", "Creator", "Description"].includes(k)) {
@@ -139,19 +162,48 @@ window.addEventListener("message", event => {
                 switchTheme(args.data);
                 break;
 
-            case "player-data":
-                document.querySelector("welcome-message").innerHTML = document.querySelector("welcome-message").innerHTML
-                    .replace(/__PLAYERNAME/g, args.data.name)
-                document.querySelector("w-small").innerHTML = document.querySelector("w-small").innerHTML
-                    .replace(/__PLAYERID/g, args.data.userID);
-                
-                let stats = "";
-                Object.keys(args.data.stats).forEach(k => {
-                    stats += `${k.replace(/\$/g, " ")}: ${args.data.stats[k]}<br>`;
-                });
-                document.querySelector("user-stats").innerHTML = stats;
+            case "rescale":
+                reScaleApp(args.scale, false);
+                break;
 
+            case "checkbox-states":
+                Object.keys(args.states).forEach(x => {
+                    document.querySelector(`[saveID="${x}"]`).check(args.states[x]);
+                });
+                break;
+
+            case "player-data":
+                if (args.didntDecode) {
+                    document.querySelector("welcome-message").innerHTML = args.data.title;
+                    document.querySelector("w-small").innerHTML = args.data.sub;
+                    document.querySelector("#stats-viewer").style.display = "none";
+                } else {
+                    document.querySelector("welcome-message").innerHTML = document.querySelector("welcome-message").innerHTML
+                        .replace(/__PLAYERNAME/g, args.data.name)
+                    document.querySelector("w-small").innerHTML = document.querySelector("w-small").innerHTML
+                        .replace(/__PLAYERID/g, args.data.userID);
+                    
+                    let stats = "";
+                    Object.keys(args.data.stats).forEach(k => {
+                        stats += `${k.replace(/\$/g, " ")}: ${args.data.stats[k]}<br>`;
+                    });
+                    document.querySelector("user-stats").innerHTML = stats;
+                }
                 document.querySelector("home-screen").style.opacity = 1;
+                break;
+
+            case "show-tutorial":
+                document.querySelector(`[link="${args.screen}"]`).switchTo();
+
+                if (args.highlight) {
+                    args.highlight.forEach(x => {
+                        document.querySelector(x).classList.add("highlight");
+                    });
+                } else {
+                    arr(document.querySelectorAll(".highlight")).forEach(x => {
+                        x.classList.remove("highlight");
+                    });
+                }
                 break;
 
             case "init":
@@ -162,6 +214,7 @@ window.addEventListener("message", event => {
                 document.querySelector(".version-title").style.opacity = .4;
                 if (!args.obj.production) document.getElementById("dev-toggle").check(true);
                 break;
+
             case "returnCode":
                 switch (args.code.split("::").shift()) {
                     case "remove-import":
@@ -198,8 +251,13 @@ function splash(message) {
     }
 }
 
-function reScaleApp(s) {
+function reScaleApp(s, ipc = true) {
     html.style.setProperty("--scale", s);
+    if (ipc) { 
+        ipcSend({ action: "save-to-data", key: "scale", val: s })
+    } else {
+        document.getElementById("scale-slider").setValue(s);
+    };
 }
 
 function switchTheme(to) {
@@ -254,6 +312,7 @@ class CoolSlider extends HTMLElement {
     }
 
     setValue(val) {
+        const i = this.querySelector("input");
         this.children[0].value = val;
         this.children[1].innerHTML = this.hasAttribute("valtype") ? i.value + this.getAttribute("valtype") : i.value;
     }

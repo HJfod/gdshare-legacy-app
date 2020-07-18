@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "make-win32": "electron-packager . gdshare --overwrite --asar --platform=win32 --arch=ia32 --ignore=.gitignore --icon=resources/share.ico --prune=true --out=release-builds --version-string.CompanyName=HJfod --version-string.FileDescription=CE --version-string.ProductName=\"GD Share\""
+    "make-win32": "electron-packager . gdshare --overwrite --asar --platform=win32 --arch=ia32 --ignore=.gitignore --extraResource='EULA.txt' --extraResource='resources/light.gdst' --extraResource='resources/dark.gdst' --extraResource='resources/mid.gdst' --extraResource='resources/amoled.gdst' --icon=resources/share.ico --prune=true --out=release-builds --version-string.CompanyName=HJfod --version-string.FileDescription=CE --version-string.ProductName=\"GD Share\""
   },
   "author": "",
   "license": "ISC",

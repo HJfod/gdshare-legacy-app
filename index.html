@@ -55,7 +55,7 @@
                         <w-small>UserID: __PLAYERID</w-small>
 
                         <br>
-                        <roll-over>
+                        <roll-over id="stats-viewer">
                             <roll-text>View stats</roll-text>
                             <roll-content>
                                 <user-stats></user-stats>
@@ -81,7 +81,7 @@
 
                     <button id="export" onclick="GDShare.export()">Export selected</button>
 
-                    <button onclick="GDShare.selectExportPath()">Select path</button>
+                    <button tID="e-path" onclick="GDShare.selectExportPath()">Select path</button>
 
                     <help-button help="export"></help-button>
 
@@ -116,6 +116,13 @@
                     <title-medium>Settings</title-medium>
 
                     <roll-over>
+                        <roll-text>General</roll-text>
+                        <roll-content>
+                            <check-box saveID="loadccgm" checked>Decode CCGameManager (Longer startup time)</check-box>
+                        </roll-content>
+                    </roll-over>
+
+                    <roll-over>
                         <roll-text>Display</roll-text>
                         <roll-content>
                             <p>Theme:</p>
@@ -125,7 +132,7 @@
                             <button onclick='ipcSend({ "action": "switch-theme", "to": "light" })'>☀️</button>
 
                             <p>App scale:</p>
-                            <cool-slider max="2" min="0.5" val="1" inc=".25" onrelease="reScaleApp(this.value)" valtype="x"></cool-slider>
+                            <cool-slider max="2" min="0.5" val="1" inc=".25" onrelease="reScaleApp(this.value)" valtype="x" id="scale-slider"></cool-slider>
                         </roll-content>
                     </roll-over>
 
@@ -167,8 +174,8 @@
                             <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
                                 <roll-text>Advanced settings</roll-text>
                                 <roll-content>
-                                    <check-box id="dev-toggle" var="devMode" ontoggle='ipcSend({ "action": "toggle-dev-mode", "mode": "__THISVAR" })'>Developer mode</check-box>
-                                    <check-box var="showDevFeatures">Show indev features</check-box>
+                                    <check-box saveID="devmode" id="dev-toggle" var="devMode" ontoggle='ipcSend({ "action": "toggle-dev-mode", "mode": "__THISVAR" })'>Developer mode</check-box>
+                                    <check-box saveID="showindev" var="showDevFeatures">Show indev features (Likely to not work)</check-box>
                                 </roll-content>
                             </roll-over>
 

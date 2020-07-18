@@ -202,3 +202,9 @@ loading-text {
 .svg {
     transform: translateY(+50%);
 }
+
+.highlight {
+    position: relative;
+    z-index: 9999;
+    box-shadow: 0 0 0 99999px rgba(0, 0, 0, .5);
+}
