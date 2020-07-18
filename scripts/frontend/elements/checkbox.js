@@ -10,6 +10,9 @@ class CheckBox extends HTMLElement {
         if (!this.hasAttribute("checked")) {
             this.previousSibling.style.opacity = 0;
         }
+        if (this.hasAttribute("var")) {
+            arr(document.querySelectorAll(`[toggle-var="${this.getAttribute("var")}"]`)).forEach(x => { x.style.display = this.hasAttribute("checked") ? "" : "none"});
+        }
     }
 
     check(set = null) {
@@ -33,10 +36,15 @@ class CheckBox extends HTMLElement {
 
         if (this.hasAttribute("var")) {
             global[this.getAttribute("var")] = this.hasAttribute("checked");
+            arr(document.querySelectorAll(`[toggle-var="${this.getAttribute("var")}"]`)).forEach(x => { x.style.display = this.hasAttribute("checked") ? "" : "none"});
         }
         if (this.hasAttribute("ontoggle")) {
             const o = this.getAttribute("ontoggle");
             window[o.split("(").shift()](o.substring(o.indexOf("(") + 1,o.lastIndexOf(")")).replace(/__THISVAR/g, global[this.getAttribute("var")]));
+        }
+
+        if (this.hasAttribute("saveID")) {
+            ipcSend({ action: "save-to-data", key: `checkbox`, val: { key: this.getAttribute("saveID"), val: this.hasAttribute("checked") } });
         }
     }
 }
