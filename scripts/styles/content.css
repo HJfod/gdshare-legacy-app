@@ -59,7 +59,7 @@ app-page {
     overflow-y: scroll;
 }
 
-button:not(.option):not(.app-title-button):not(.search-button) {
+button:not(.option):not(.option-hover):not(.app-title-button):not(.search-button) {
     background-color: var(--color-light);
     padding-left: var(--size-pad);
     padding-right: var(--size-pad);
@@ -72,7 +72,7 @@ button:not(.option):not(.app-title-button):not(.search-button) {
     font-size: var(--size-text);
 }
 
-button:not(.option):not(.app-title-button):not(.search-button):hover {
+button:not(.option):not(.option-hover):not(.app-title-button):not(.search-button):hover {
     background-color: var(--color-lighter);
 }
 

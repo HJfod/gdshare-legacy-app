@@ -1,0 +1,12 @@
+background:	#141414
+dark:		#252526
+light:		#39393a
+lighter:		#49494a
+main:		#2cd5ff
+secondary:	rgb(103, 255, 204)
+gradient:		linear-gradient(to right,var(--color-secondary),var(--color-main))
+titlebar:		var(--color-gradient)
+titlebar-text:	#000
+hover:		rgba(255,255,255,0.15)
+text:		#fff
+shadow:		rgba(0,0,0,.5)

@@ -1,0 +1,44 @@
+=============================
+    End User License Agreement for GDShare
+=============================
+
+This is the End User License Agreement for the GDShare software. By using this application, you agree to the terms of this EULA.
+
+1.1. Your rights
+
+You are not allowed to reverse engineer, decompile, modify or change this Software without your own permission. You are required to fully prepare yourself before viewing the Source Code behind this Software. Any traumatic, hurtful and/or terrifying experiences you feel after seeing the Source Code behind this Software are your responsibility.
+
+You are not allowed to use this Application to:
+-Do anything that is against your country's laws
+-Share Geometry Dash levels you do not have the rights to
+-View someone else's Geometry Dash levels you do not have the rights to
+-Develop anything related to weapons of mass destruction
+-Advance the development of genetically engineered cat girls without telling me.
+
+If you do find this Software useful in your quest to help humanity achieve it's ultimate goal of domestic cat girls, you are required to immediately tell the developer(s) of this Software.
+
+1.2 Our rights
+
+"Our" referring to the developer(s) of this Software, as this EULA is written from the perspective of us. "Us", as in the developer(s) of this Software. This Software was developed by it's developer(s), one of whom is also writing this EULA. That one writing this EULA is using "us" though, because we mean for this EULA to appear as if it's written by the abstract notion of "us" (Developer(s)). Although this Software has been mainly developed by one person who is the same as is writing this EULA, we are still a collective. "We" doesn't mean that the person writing this is a collective, but who he is referring to, "we", as in the developer(s) of this application, who are the "we", as we (the developer(s)) are methaphorically the one's writing this, even though only one person is writing it, but is writing it from the perspective of us developer(s), as that is the standard for EULAs. We hope you understand.
+
+1.3 Software
+
+This Software is meant to give it's Users the ability to:
+-Export levels from their Geometry Dash client
+-Import levels into their Geometry Dash client
+-Create backups of their Geometry Dash client
+-Analyze the levels of Geometry Dash
+-Realize this Software is utterly useless.
+
+If you feel this Software does not meet some of the requirements listed above, do let us know and we will do our best not to fix it. "We" and "us" as in the developer(s) of this Software.
+
+If you encounter problems within this Software, you are yourself responsible for them as we (the developer(s) of this application, who are being referred to in a plural form) believe that this app has been programmed perfectly and can not harbor any bugs or glitches apart from the ones we didn't know of or were too lazy to fix. "We", as in the developer(s) of this application.
+
+Nevertheless, if you find a bug, not a real bug as in an insect, but a bug as in a glitch in the program, as in a malfunction, as in the program does not work as intended, do let us know. "Us", as in, the developer(s) of this Software. In this case though, "us" refers to the one developer mainly behind this Software, "HJfod", although we are still using "us" to be consistent throughout this EULA. "Us", as in the developer(s) of this Software, even though the developer writing this is just a singular entity, but per our (singular developer's) wishes is being referred to as "us".
+
+1.4 Why the fuck are you still reading this
+
+We, the developer(s) of this Software; "we", as in the one who is writing this but is referring to himself in plural form; would be pleased to not answer any questions you may have regarding this Software. If you are in need of help, shoot a DM over to HJfod on the Software Discord using his tag HJfod#1795. "Shoot", as in "send", not as in "fire a weapon", because we would not be pleased if you shot a DM. "DM", as in "Direct Message", as in the "Message" function on Discord, not the Server "Message" function, but the private one person to one person "Message" function.
+
+We are not affiliated with Discord in any way and this Software is not a promotion nor a denotion of their Software. "We", as in, the developer(s) of this Software.
+

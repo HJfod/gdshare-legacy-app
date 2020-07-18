@@ -37,6 +37,10 @@ class RollOver extends HTMLElement {
             this.trans = true;
         }
     }
+
+    click() {
+        this.roll();
+    }
 }
 
 customElements.define('roll-over', RollOver);

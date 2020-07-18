@@ -1,0 +1,55 @@
+amoled
+background:	#000
+dark:		#000
+light:		#111
+lighter:		#222
+main:		#666
+secondary:	#888
+gradient:		linear-gradient(to right,var(--color-secondary),var(--color-main))
+titlebar:		#000
+titlebar-text:	#fff
+hover:		rgba(255,255,255,0.15)
+text:		#fff
+shadow:		rgba(255,255,255,.5)
+=!=
+dark
+background:	#141414
+dark:		#252526
+light:		#39393a
+lighter:		#49494a
+main:		#2cd5ff
+secondary:	rgb(103, 255, 204)
+gradient:		linear-gradient(to right,var(--color-secondary),var(--color-main))
+titlebar:		var(--color-gradient)
+titlebar-text:	#000
+hover:		rgba(255,255,255,0.15)
+text:		#fff
+shadow:		rgba(0,0,0,.5)
+=!=
+light
+background:	#ccc
+dark:		#fff
+light:		#ddd
+lighter:		#aaa
+main:		#fac
+secondary:	#caf
+gradient:		linear-gradient(to right,var(--color-secondary),var(--color-main))
+titlebar:		var(--color-background)
+titlebar-text:	#000
+hover:		rgba(0,0,0,0.15)
+text:		#000
+shadow:		rgba(0,0,0,.5)
+=!=
+mid
+background:	rgb(0,33,43)
+dark:		rgb(0,43,54)
+light:		rgb(0,62,64)
+lighter:		rgb(0,56,71)
+main:		rgb(212,192,121)
+secondary:	rgb(115,201,145)
+gradient:		linear-gradient(to right,var(--color-secondary),var(--color-main))
+titlebar:		var(--color-gradient)
+titlebar-text:	#fff
+hover:		rgba(0,0,0,0.15)
+text:		#fff
+shadow:		rgba(0,0,0,.5)

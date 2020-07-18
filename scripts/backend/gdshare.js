@@ -5,6 +5,7 @@ const path = require("path");
 const pako = require("pako");
 const fs = require("fs");
 const { performance } = require('perf_hooks');
+const { rejects } = require("assert");
 const fileExt = ".gmd";
 
 let dLoop = "";
@@ -288,7 +289,7 @@ function getLevelInfo(name, from = "") {
     /**
      * @author HJfod
      * @param {String} name The name / file path of the level to get
-     * @param {String} [from] User data to get the level info from (don't supply if from level path)
+     * @param {String} [from] Decoded levels array to get the level from (don't supply if from level path)
      * @description Decode a Base64 string
      * @returns {Object} error: String saying what went wrong, info: Info about the level
      */
@@ -297,14 +298,13 @@ function getLevelInfo(name, from = "") {
         let foundLevel;
         
         if (from){
-            name = name.toLowerCase();
-            if (name.endsWith(")")) name = name.substring(0,name.length-4);
-            foundLevel = from.find(x => x.toLowerCase().includes(`<k>k2</k><s>${name}</s>`));
+            foundLevel = from.find(x => x.name === name);
+            if (foundLevel) foundLevel = foundLevel.data;
         }else{      // name was a path
             try { fs.accessSync(name) } catch(err) {
                 rej("Unable to access file.");
             }
-            if ( !name.endsWith(fileExt) ) return { error: "File is not a .gmd file." };
+            if ( !name.endsWith(fileExt) ) rej("File is not a .gmd file.");
             foundLevel = fs.readFileSync(name, 'utf8');
         }
     

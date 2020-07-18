@@ -28,5 +28,8 @@ const GDShare = {
     setExportPath(to) {
         this.exportPath = to;
         document.getElementById("export-path").innerHTML = to;
+    },
+    view(lvl) {
+        ipcSend({ action: "level-get-info", name: lvl, from: "default", returnCode: `export::${lvl}` });
     }
 };
