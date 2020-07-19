@@ -38,6 +38,8 @@ class SelectMenu extends HTMLElement {
         }
 
         this.appendChild(o);
+
+        return o;
     }
     
     clear() {

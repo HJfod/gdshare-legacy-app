@@ -5,7 +5,7 @@ select-menu {
     display: block;
     border-radius: var(--size-corner);
     overflow-y: auto;
-    text-align: center;
+    text-align: left;
 }
 
 select-info {
@@ -23,7 +23,8 @@ select-info {
     border: none;
     margin-bottom: calc( var(--size-buffer) / 2 );
     font-size: var(--size-text);
-    text-align: center;
+    text-align: left;
+    padding-left: calc( var(--size-pad) );
 }
 
 .o-selected {
@@ -55,7 +56,7 @@ select-info {
     background-color: var(--color-light);
 }
 
-.option:hover .option-hover {
+.option:hover .option-hover, .fake-hover .option-hover {
     opacity: 1;
     display: initial;
 }
@@ -367,4 +368,13 @@ help-button {
 help-button:hover {
     background-color: var(--color-secondary);
     opacity: 1;
+}
+
+
+
+scroll-content {
+    height: 100px;
+    display: block;
+    width: 100%;
+    overflow-y: auto;
 }

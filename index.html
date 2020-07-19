@@ -67,15 +67,22 @@
                 <app-page link="backup">
                     <!--<button>&#128932;</button>-->
 
-                    <select-menu menu="backup-menu" size=4 empty-text="No backups found." id="backup-select"></select-menu>
+                    <select-menu menu="backup-menu" size=4 empty-text="No backups found." id="backup-select" hover='[
+                        { "type": "button", "text": "Load", "onclick": "ipcSend({ \"action\": \"switch-to-backup\", \"to\": this.parentNode.getAttribute(\"data-id\") })" },
+                        { "type": "button", "text": "View", "onclick": "ipcSend({ \"action\": \"view-backup\", \"which\": this.parentNode.getAttribute(\"data-id\") })" }
+                    ]'></select-menu>
 
                     <search-box menu="backup-menu"></search-box>
 
-                    <button onclick='ipcSend({ "action": "new-backup" })'>New backup</button>
+                    <button onclick='ipcSend({ "action": "new-backup" })' tID="new-b">New backup</button>
+                    <button onclick='ipcSend({ "action": "import-backup" })' tID="imp-b">Import backup</button>
+                    <button onclick='ipcSend({ "action": "refresh-backups" })'>Refresh</button>
+                    <help-button help="backup"></help-button>
 
                     <p>Backup folder: <t-dark id="backup-folder"></t-dark></p>
 
-                    <button onclick='ipcSend({ "action": "select-backup-folder", "current": global.backupFolder })'>Change</button>
+                    <button onclick='ipcSend({ "action": "select-backup-folder", "current": global.backupFolder })' tID="cha-bf">Change</button>
+                    <button onclick='ipcSend({ "action": "open-folder", "folder": global.backupFolder })'>Open folder</button>
                 </app-page>
 
                 <app-page link="export">
@@ -126,6 +133,8 @@
                         <roll-content>
                             <check-box saveID="loadccgm" checked>Decode CCGameManager (Longer startup time)</check-box>
                             <check-box saveID="dateformat" var="dateFormat" ontoggle="quickBackupRefresh()">Format date as MM/DD/YY</check-box>
+                            <button onclick='ipcSend({ "action": "refresh-app" })'>Refresh GD data</button>
+                            <button onclick='ipcSend({ "action": "view-tutorial" })'>View tutorial</button>
                         </roll-content>
                     </roll-over>
 
@@ -203,17 +212,45 @@
 
                 <app-page link="help" id="help-page">
 
+                    <roll-over>
+                        <roll-text>General</roll-text>
+                        <roll-content>
+                            <text>You can NOT have GD open while using this app.</text>
+                            <br>
+                            <text>If you find an issue, </text><hyper-link link="https://github.com/HJfod/gdshare/issues">please file a bug report on Github</hyper-link><text>.</text>
+                        </roll-content>
+                    </roll-over>
+
+                    <roll-over help="backup">
+                        <roll-text>Backups</roll-text>
+                        <roll-content>
+                            <text>Backups are the same as saving your data in GD, except that the files are saved locally and you can have multiple at the same time.</text>
+                            <br><br>
+                            <text>To create a backup, click <t-m>New backup</t-m>. This will create a backup of your current game files.</text>
+                            <br><br>
+                            <text>If you have made backups before, you can add them by clicking <t-m>Import backup</t-m>. The selected folder is then copied into your backups folder.</text>
+                            <br><br>
+                            <text>To load a backup, hover over the backup and click <t-m>Load</t-m>. The app will ask you if you'd like to save your current GD progress.</text>
+                            <br><br>
+                            <text>Click <t-m>Refresh</t-m> to reload your backup folders.</text>
+                            <br><br>
+                            <text>If you'd like to see what stats and levels a backup has before loading, hover over the backup and click <t-m>View</t-m>. It will take a while to load backup data.</text>
+                        </roll-content>
+                    </roll-over>
+
                     <roll-over help="export">
                         <roll-text>Exporting levels</roll-text>
                         <roll-content>
-                            <text>Select the level(s) you want exported from the list, then select the path and then <t-s>Export Selected</t-s>.</text>
+                            <text>Select the level(s) you want exported from the list, then <t-m>Select path</t-m> and then <t-m>Export Selected</t-m>.</text>
                         </roll-content>
                     </roll-over>
 
                     <roll-over help="import">
                         <roll-text>Importing levels</roll-text>
                         <roll-content>
-
+                            <text>To import a level, drag and drop it on the <t-m>Import button</t-m>, or click the <t-m>Import</t-m> button to browse and select file(s).</text>
+                            <br>
+                            <text>The selected levels will appear in <t-s>widgets</t-s> below the button. Roll open a <t-s>widget</t-s> by clicking it and click <t-m>Import</t-m> to import it or <t-m>Close</t-m> to close the <t-s>widget</t-s>.</text>
                         </roll-content>
                     </roll-over>
 

@@ -361,12 +361,6 @@ function test() {
 }
 
 function initializeApp() {
-    exec('tasklist', (err, stdout, stderr) => {
-        if (stdout.toLowerCase().indexOf('geometrydash.exe') > -1) {
-            status.emit("error", "gd-is-open");
-        }
-    });
-
     dTesting: for (let i = 0; i < 5; i++) {
         try {
             fs.accessSync(path.join(__dirname + dLoop + "/resources"));

@@ -14,6 +14,7 @@
     "electron-packager": "^15.0.0"
   },
   "dependencies": {
+    "ncp": "^2.0.0",
     "pako": "^1.0.11"
   },
   "production": false

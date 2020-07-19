@@ -72,6 +72,15 @@ window.addEventListener("message", event => {
                 document.querySelector(args.obj).click();
                 break;
 
+            case "hover":
+                document.querySelector(args.obj).classList.add("fake-hover");
+                break;
+            case "unhover":
+                arr(document.querySelectorAll(".fake-hover")).forEach(o => {
+                    o.classList.remove("fake-hover");
+                });
+                break;
+
             case "level-list":
                 document.getElementById("level-list").clear();
                 args.levels.forEach(l => document.getElementById("level-list").addOption(l.name));
@@ -82,19 +91,46 @@ window.addEventListener("message", event => {
                 const bs = document.getElementById("backup-select");
                 bs.clear();
                 args.list.forEach(b => {
-                    if (global.dateFormat) {
-                        const c = b.split("_").pop().split("-");
-                        b = `Backup ${c[1]}/${c[2]}/${c[0]}`;
+                    let o, ob = b;
+                    if (b.startsWith("GDSHARE_BACKUP_")) {
+                        let n;
+                        if (b.includes("#")) {
+                            n = b.split("#").pop();
+                            b = b.split("#").shift();
+                        }
+                        if (global.dateFormat) {
+                            const c = b.split("_").pop().split("-");
+                            b = `${c[1]}/${c[2]}/${c[0]}`;
+                        } else {
+                            b = `${b.split("_").pop().split("-").reverse().join(".")}`;
+                        }
+                        o = bs.addOption(`Backup ${b}${n ? ` <t-dark>#${n}</t-dark>` : ""}`);
                     } else {
-                        b = `Backup ${b.split("_").pop().split("-").reverse().join(".")}`;
+                        o = bs.addOption(`<external-backup></external-backup>${b}`);
                     }
-                    bs.addOption(b);
+                    o.setAttribute("data-id", ob);
                 });
                 bs.search("");
                 break;
             
             case "made-backup":
-                document.getElementById("backup-select").addOption(args.name);
+                let b = args.name;
+                if (b.startsWith("GDSHARE_BACKUP_")) {
+                    let n;
+                    if (b.includes("#")) {
+                        n = b.split("#").pop();
+                        b = b.split("#").shift();
+                    }
+                    if (global.dateFormat) {
+                        const c = b.split("_").pop().split("-");
+                        b = `${c[1]}/${c[2]}/${c[0]}`;
+                    } else {
+                        b = `${b.split("_").pop().split("-").reverse().join(".")}`;
+                    }
+                    document.getElementById("backup-select").addOption(`Backup ${b}${n ? ` <t-dark>#${n}</t-dark>` : ""}`);
+                } else {
+                    document.getElementById("backup-select").addOption(`<external-backup></external-backup>${b}`);
+                }
                 break;
 
             case "path-selected":
@@ -258,15 +294,21 @@ window.addEventListener("message", event => {
 function quickBackupRefresh() {
     const bs = document.getElementById("backup-select");
     arr(bs.querySelectorAll("button")).forEach(b => {
-        let t = b.querySelector("o-text").innerHTML;
-        const c = t.split(" ").pop().split(/[.\/]/);
-        console.log(c);
-        if (global.dateFormat) {
-            t = `Backup ${c[1]}/${c[0]}/${c[2]}`;
-        } else {
-            t = `Backup ${c[1]}.${c[0]}.${c[2]}`;
+        if (!b.querySelector("external-backup")) {
+            let t = b.querySelector("o-text").innerHTML;
+            let n;
+            if (t.includes("#")) {
+                n = b.querySelector("o-text").querySelector("t-dark").innerHTML.split("#").pop();
+                t = t.substring(0,t.indexOf("<") - 1);
+            }
+            const c = t.split(" ").pop().split(/[.\/]/);
+            if (global.dateFormat) {
+                t = `Backup ${c[1]}/${c[0]}/${c[2]}`;
+            } else {
+                t = `Backup ${c[1]}.${c[0]}.${c[2]}`;
+            }
+            b.querySelector("o-text").innerHTML = `${t}${n ? ` <t-dark>#${n}</t-dark>` : ""}`;
         }
-        b.querySelector("o-text").innerHTML = t;
     });
 }
 
