@@ -6,6 +6,7 @@ const ncp = require('ncp').ncp
 
 const GDShare = require("./scripts/backend/gdshare.js");
 const UP = require("./scripts/backend/update.js");
+const update = require("./scripts/backend/update.js");
 
 GDShare.initializeApp();
 
@@ -274,39 +275,7 @@ ipc.on("app", (event, args) => {
 			break;
 
 		case "check-for-updates":
-			post({ action: "info", msg: { type: "loading", msg: "Checking for updates..." } });
-			UP.dog(global.version)
-			.then(msg => {
-				if (msg.status === "up-to-date") {
-					post({
-						action: "info",
-						msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;You are up to date! (v${global.version})`
-					});
-				} else if (msg.status === "new-available") {
-					post({ 
-						action: "info",
-						msg: `<hyper-link link='https://github.com/HJfod/gdshare/releases/latest'>New version found! (${msg.newVer})</hyper-link>`
-					});
-				} else if (msg.status === "upper-to-date") {
-					post({ 
-						action: "info",
-						msg: `You are using a version (${msg.oldVer}) newer than last stable release (${msg.newVer}).`
-					});
-				}
-			})
-			.catch(err => {
-				if (err.error === "not-200") {
-					post({
-						action: "info",
-						msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err.code}: Unable to check for updates!`
-					});
-				} else if (err.error === "cant-parse") {
-					post({
-						action: "info",
-						msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err.msg}: Unable to check for updates!`
-					});
-				}
-			});
+			checkUpdates();
 			break;
 
 		case "toggle-dev-mode":
@@ -380,11 +349,12 @@ ipc.on("app", (event, args) => {
 				});
 				const lastFolder = global.backupFolder;
 				fs.readdirSync(lastFolder, { withFileTypes: true }).forEach(d => {
-					if (d.isDirectory()) {
-						if (d.name.startsWith("GDSHARE_BACKUP_")) {
+					try {
+						if (d.isDirectory()) {
+							fs.accessSync(`${lastFolder}/${d.name}/CCLocalLevels.dat`);
 							fs.renameSync(`${lastFolder}/${d.name}`,`${f}/${d.name}`);
 						}
-					}
+					} catch(e) {}
 				});
 				refreshBackups(f);
 				global.backupFolder = f;
@@ -492,6 +462,9 @@ ipc.on("app", (event, args) => {
 					}
 				}
 				if (udat.backupFolder) global.backupFolder = udat.backupFolder;
+				if (udat.autoupdate !== false) {
+					checkUpdates();
+				}
 			} catch(e) {
 				global.firstTime = true;
 			};
@@ -517,6 +490,42 @@ ipc.on("app", (event, args) => {
 			break;
 	}
 });
+
+function checkUpdates() {
+	post({ action: "info", msg: { type: "loading", msg: "Checking for updates..." } });
+	UP.dog(global.version)
+	.then(msg => {
+		if (msg.status === "up-to-date") {
+			post({
+				action: "info",
+				msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;You are up to date! (v${global.version})`
+			});
+		} else if (msg.status === "new-available") {
+			post({ 
+				action: "info",
+				msg: `<hyper-link link='https://github.com/HJfod/gdshare/releases/latest'>New version found! (${msg.newVer})</hyper-link>`
+			});
+		} else if (msg.status === "upper-to-date") {
+			post({ 
+				action: "info",
+				msg: `You are using a version (${msg.oldVer}) newer than last stable release (${msg.newVer}).`
+			});
+		}
+	})
+	.catch(err => {
+		if (err.error === "not-200") {
+			post({
+				action: "info",
+				msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err.code}: Unable to check for updates!`
+			});
+		} else if (err.error === "cant-parse") {
+			post({
+				action: "info",
+				msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err.msg}: Unable to check for updates!`
+			});
+		}
+	});
+}
 
 function checkGDOpen() {
 	if (require('child_process').execSync("tasklist").toString().toLowerCase().indexOf('geometrydash.exe') > -1) {

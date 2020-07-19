@@ -133,6 +133,7 @@
                         <roll-content>
                             <check-box saveID="loadccgm" checked>Decode CCGameManager (Longer startup time)</check-box>
                             <check-box saveID="dateformat" var="dateFormat" ontoggle="quickBackupRefresh()">Format date as MM/DD/YY</check-box>
+                            <check-box saveID="autoupdate" checked>Check for updates on startup</check-box>
                             <button onclick='ipcSend({ "action": "refresh-app" })'>Refresh GD data</button>
                             <button onclick='ipcSend({ "action": "view-tutorial" })'>View tutorial</button>
                         </roll-content>
