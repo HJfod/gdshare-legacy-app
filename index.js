@@ -20,7 +20,8 @@ const global = {
 	production: require('./package.json').production,
 	largeFileSize: 20,
 	decodeCCGM: true,
-	firstTime: false
+	firstTime: false,
+	backupFolder: ""
 }
 
 const dim = { w: 440, h: 550 };
@@ -283,13 +284,46 @@ ipc.on("app", (event, args) => {
 		case "save-to-data":
 			saveToUserData(args.key, args.val);
 			break;
+
+		case "new-backup":
+			post({ action: "info", msg: { type: "loading", msg: `Creating backup...` } });
+
+			const time = new Date();
+			const dir = `${global.backupFolder}/GDSHARE_BACKUP_${time.getFullYear()}-${time.getMonth()}-${time.getDate()}`;
+			fs.mkdirSync(dir);
+
+			[ GDShare.getCCPath(), GDShare.getCCPath("gm") ].forEach(f => {
+				const data = fs.readFileSync(f);
+				fs.writeFileSync(`${dir}/${f.split("/").pop()}`, data);
+			});
+
+			post({ action: "info", msg: { type: "close" } });
+			post({ action: "made-backup", name: dir.split("/").pop() });
+			break;
+
+		case "select-backup-folder":
+			try {
+				const f = dialog.showOpenDialogSync({
+					title: "Select backups folder",
+					defaultPath: args.current,
+					buttonLabel: "Select",
+					properties: [
+						"openDirectory"
+					]
+				})[0].replace(/\\/g,"/");
+				if (f) {
+					post({
+						action: "new-backup-folder",
+						folder: f
+					});
+					global.backupFolder = f;
+					saveToUserData("backupFolder", f);
+				}
+			} catch(e) {};
+			break;
 		
 		case "init":
-			post({ action: "init", obj: {
-				appVersion: `v${global.version} inDEV-2`,
-				appVersionNum: global.version,
-				production: global.production
-			} });
+			global.backupFolder = GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/"));
 
 			try {
 				fs.accessSync("data/userdata.txt");
@@ -307,9 +341,30 @@ ipc.on("app", (event, args) => {
 						global.decodeCCGM = false;
 					}
 				}
+				if (udat.backupFolder) global.backupFolder = udat.backupFolder;
 			} catch(e) {
 				global.firstTime = true;
 			};
+
+			post({ action: "init", obj: {
+				appVersion: `v${global.version} inDEV-3`,
+				appVersionNum: global.version,
+				production: global.production,
+				backupFolder: global.backupFolder
+			} });
+
+			const backupList = [];
+			fs.readdirSync(global.backupFolder, { withFileTypes: true }).forEach(f => {
+				if (f.isDirectory()) {
+					if (f.name.startsWith("GDSHARE_BACKUP_")) {
+						backupList.push(f.name);
+					}
+				}
+			});
+			post({
+				action: "backup-list",
+				list: backupList
+			});
 
 			const gpath = GDShare.getCCPath();
 			const cpath = GDShare.getCCPath("gm");

@@ -67,9 +67,15 @@
                 <app-page link="backup">
                     <!--<button>&#128932;</button>-->
 
-                    <select-menu menu="backup-menu" size=4 empty-text="Not implemented yet; Coming soon!"></select-menu>
+                    <select-menu menu="backup-menu" size=4 empty-text="No backups found." id="backup-select"></select-menu>
 
                     <search-box menu="backup-menu"></search-box>
+
+                    <button onclick='ipcSend({ "action": "new-backup" })'>New backup</button>
+
+                    <p>Backup folder: <t-dark id="backup-folder"></t-dark></p>
+
+                    <button onclick='ipcSend({ "action": "select-backup-folder", "current": global.backupFolder })'>Change</button>
                 </app-page>
 
                 <app-page link="export">
@@ -119,6 +125,7 @@
                         <roll-text>General</roll-text>
                         <roll-content>
                             <check-box saveID="loadccgm" checked>Decode CCGameManager (Longer startup time)</check-box>
+                            <check-box saveID="dateformat" var="dateFormat" ontoggle="quickBackupRefresh()">Format date as MM/DD/YY</check-box>
                         </roll-content>
                     </roll-over>
 

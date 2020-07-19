@@ -5,7 +5,6 @@ const path = require("path");
 const pako = require("pako");
 const fs = require("fs");
 const { performance } = require('perf_hooks');
-const { rejects } = require("assert");
 const fileExt = ".gmd";
 
 let dLoop = "";

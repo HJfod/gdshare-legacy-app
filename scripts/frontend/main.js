@@ -2,7 +2,9 @@ const html = document.getElementsByTagName('html')[0];
 const global = {
     fileSuffix: ".gmd",
     displayFileTypes: false,
-    showDevFeatures: false
+    showDevFeatures: false,
+    backupFolder: "",
+    dateFormat: false
 };
 
 function arr(list) {
@@ -74,6 +76,25 @@ window.addEventListener("message", event => {
                 document.getElementById("level-list").clear();
                 args.levels.forEach(l => document.getElementById("level-list").addOption(l.name));
                 document.getElementById("level-list").search("");
+                break;
+
+            case "backup-list":
+                const bs = document.getElementById("backup-select");
+                bs.clear();
+                args.list.forEach(b => {
+                    if (global.dateFormat) {
+                        const c = b.split("_").pop().split("-");
+                        b = `Backup ${c[1]}/${c[2]}/${c[0]}`;
+                    } else {
+                        b = `Backup ${b.split("_").pop().split("-").reverse().join(".")}`;
+                    }
+                    bs.addOption(b);
+                });
+                bs.search("");
+                break;
+            
+            case "made-backup":
+                document.getElementById("backup-select").addOption(args.name);
                 break;
 
             case "path-selected":
@@ -206,6 +227,11 @@ window.addEventListener("message", event => {
                 }
                 break;
 
+            case "new-backup-folder":
+                document.getElementById("backup-folder").innerHTML = args.folder;
+                global.backupFolder = args.folder;
+                break;
+
             case "init":
                 document.getElementById("version-text").innerHTML = 
                 document.getElementById("version-text").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
@@ -213,6 +239,8 @@ window.addEventListener("message", event => {
                 document.querySelector(".version-title").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
                 document.querySelector(".version-title").style.opacity = .4;
                 if (!args.obj.production) document.getElementById("dev-toggle").check(true);
+                document.getElementById("backup-folder").innerHTML = args.obj.backupFolder;
+                global.backupFolder = args.obj.backupFolder;
                 break;
 
             case "returnCode":
@@ -226,6 +254,21 @@ window.addEventListener("message", event => {
         }
     }
 });
+
+function quickBackupRefresh() {
+    const bs = document.getElementById("backup-select");
+    arr(bs.querySelectorAll("button")).forEach(b => {
+        let t = b.querySelector("o-text").innerHTML;
+        const c = t.split(" ").pop().split(/[.\/]/);
+        console.log(c);
+        if (global.dateFormat) {
+            t = `Backup ${c[1]}/${c[0]}/${c[2]}`;
+        } else {
+            t = `Backup ${c[1]}.${c[0]}.${c[2]}`;
+        }
+        b.querySelector("o-text").innerHTML = t;
+    });
+}
 
 function splash(message) {
     document.querySelector("loading-text").style.display = "none";
