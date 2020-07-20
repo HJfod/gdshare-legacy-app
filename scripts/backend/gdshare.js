@@ -354,7 +354,7 @@ function getCCPath(which = "ll") {
         if (which === "gm") {
             return `${OtherCCPath}/CCGameManager.dat`;
         } else {
-            return `${OtherCCPath}/CCGameManager.dat`;
+            return `${OtherCCPath}/CCLocalLevels.dat`;
         }
     } else {
         if (which === "gm") {

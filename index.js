@@ -466,6 +466,9 @@ ipc.on("app", (event, args) => {
 				if (udat.checkbox.autoupdate !== false) {
 					checkUpdates(true);
 				}
+				if (udat.CCPath) {
+					GDShare.setCCFolder(udat.CCPath);
+				}
 			} catch(e) {
 				global.firstTime = true;
 			};
@@ -488,7 +491,19 @@ ipc.on("app", (event, args) => {
 			break;
 		
 		case "view-tutorial":
-			showTutorial();
+			const asktut = dialog.showMessageBoxSync({
+				type: "info",
+				buttons: [ "How to use GDShare on a GDPS (Private Server)", "View tutorial", "Cancel" ],
+				message: "What would you like help with?"
+			});
+			switch (asktut) {
+				case 0:
+
+					break;
+				case 1:
+					showTutorial();
+					break;
+			}
 			break;
 		
 		case "select-new-cc-path":
@@ -499,6 +514,8 @@ ipc.on("app", (event, args) => {
 					action: "new-cc-path",
 					path: global.defaultCCPath
 				});
+
+				saveToUserData("CCPath", null);
 
 				refreshGDData();
 			} else {
@@ -518,6 +535,8 @@ ipc.on("app", (event, args) => {
 						action: "new-cc-path",
 						path: f
 					});
+
+					saveToUserData("CCPath", f);
 
 					refreshGDData();
 				} catch(e) {}
@@ -703,7 +722,7 @@ function saveToUserData(key, val) {
 	try { fs.accessSync("data/userdata.txt") } catch(e) { fs.writeFileSync("data/userdata.txt", `{}`, "utf8") };
 
 	const data = JSON.parse(fs.readFileSync("data/userdata.txt", "utf8"));
-	if (typeof val === "object") {
+	if (typeof val === "object" && val !== null) {
 		if (!data[key]) data[key] = {};
 		data[key][val.key] = val.val;
 	} else {
