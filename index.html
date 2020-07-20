@@ -136,6 +136,24 @@
                             <check-box saveID="autoupdate" checked>Check for updates on startup</check-box>
                             <button onclick='ipcSend({ "action": "refresh-app" })'>Refresh GD data</button>
                             <button onclick='ipcSend({ "action": "view-tutorial" })'>View tutorial</button>
+
+                            <br>
+
+                            <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
+                                <roll-text>Advanced settings</roll-text>
+                                <roll-content>
+                                    <check-box saveID="devmode" id="dev-toggle" var="devMode" ontoggle='ipcSend({ "action": "toggle-dev-mode", "mode": "__THISVAR" })'>Developer mode</check-box>
+                                    <check-box saveID="showindev" var="showDevFeatures">Show indev features (Likely to not work)</check-box>
+                                    <br>
+                                    <gmd-level>
+                                        <p><b>Path to your GeometryDash data folder:</b></p>
+                                        <p><t-dark id="cc-path"></t-dark></p>
+                                        <button onclick='ipcSend({ "action": "select-new-cc-path" })'>Change</button>
+                                        <button onclick='ipcSend({ "action": "select-new-cc-path", "reset": true })'>Reset</button>
+                                        <p>Change this if you want to use GDShare on a private server.</p>
+                                    </gmd-level>
+                                </roll-content>
+                            </roll-over>
                         </roll-content>
                     </roll-over>
 
@@ -185,14 +203,6 @@
                                             <text><c-d></c-d> SMJS, Kyuuti</text>
                                         </roll-content>
                                     </roll-over>
-                                </roll-content>
-                            </roll-over>
-
-                            <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
-                                <roll-text>Advanced settings</roll-text>
-                                <roll-content>
-                                    <check-box saveID="devmode" id="dev-toggle" var="devMode" ontoggle='ipcSend({ "action": "toggle-dev-mode", "mode": "__THISVAR" })'>Developer mode</check-box>
-                                    <check-box saveID="showindev" var="showDevFeatures">Show indev features (Likely to not work)</check-box>
                                 </roll-content>
                             </roll-over>
 

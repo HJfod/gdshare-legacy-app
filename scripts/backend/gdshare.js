@@ -9,6 +9,7 @@ const fileExt = ".gmd";
 
 let dLoop = "";
 let dir;
+let OtherCCPath;
 
 function decodeXor(dat, key) {
     /**
@@ -349,11 +350,23 @@ function getDir() {
 }
 
 function getCCPath(which = "ll") {
-    if (which === "gm") {
-        return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCGameManager.dat").replace(/\\/g,"/");
+    if (OtherCCPath) {
+        if (which === "gm") {
+            return `${OtherCCPath}/CCGameManager.dat`;
+        } else {
+            return `${OtherCCPath}/CCGameManager.dat`;
+        }
     } else {
-        return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCLocalLevels.dat").replace(/\\/g,"/");
+        if (which === "gm") {
+            return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCGameManager.dat").replace(/\\/g,"/");
+        } else {
+            return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCLocalLevels.dat").replace(/\\/g,"/");
+        }
     }
+}
+
+function setCCFolder(to) {
+    OtherCCPath = to;
 }
 
 function test() {
@@ -389,5 +402,6 @@ module.exports = {
     getDir,
     getGDUserInfo,
     getCCPath,
+    setCCFolder,
     status
 }

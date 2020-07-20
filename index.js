@@ -19,7 +19,8 @@ const global = {
 	largeFileSize: 20,
 	decodeCCGM: true,
 	firstTime: false,
-	backupFolder: ""
+	backupFolder: "",
+	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/"))
 }
 
 const dim = { w: 440, h: 550 };
@@ -443,7 +444,7 @@ ipc.on("app", (event, args) => {
 			break;
 		
 		case "init":
-			global.backupFolder = GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/"));
+			global.backupFolder = global.defaultCCPath;
 
 			try {
 				fs.accessSync("data/userdata.txt");
@@ -462,18 +463,19 @@ ipc.on("app", (event, args) => {
 					}
 				}
 				if (udat.backupFolder) global.backupFolder = udat.backupFolder;
-				if (udat.autoupdate !== false) {
-					checkUpdates();
+				if (udat.checkbox.autoupdate !== false) {
+					checkUpdates(true);
 				}
 			} catch(e) {
 				global.firstTime = true;
 			};
 
 			post({ action: "init", obj: {
-				appVersion: `v${global.version} inDEV-3`,
+				appVersion: `v${global.version} inDEV-4`,
 				appVersionNum: global.version,
 				production: global.production,
-				backupFolder: global.backupFolder
+				backupFolder: global.backupFolder,
+				defaultCCPath: global.defaultCCPath
 			} });
 
 			refreshBackups(global.backupFolder);
@@ -488,14 +490,47 @@ ipc.on("app", (event, args) => {
 		case "view-tutorial":
 			showTutorial();
 			break;
+		
+		case "select-new-cc-path":
+			if (args.reset) {
+				GDShare.setCCFolder(null);
+
+				post({
+					action: "new-cc-path",
+					path: global.defaultCCPath
+				});
+
+				refreshGDData();
+			} else {
+				try {
+					const f = dialog.showOpenDialogSync({
+						title: "Select folder for CC files",
+						buttonLabel: "Select",
+						properties: [
+							"openDirectory"
+						]
+					})[0].replace(/\\/g,"/");
+					fs.accessSync(f);
+	
+					GDShare.setCCFolder(f);
+
+					post({
+						action: "new-cc-path",
+						path: f
+					});
+
+					refreshGDData();
+				} catch(e) {}
+			}
+			break;
 	}
 });
 
-function checkUpdates() {
+function checkUpdates(noinfo = false) {
 	post({ action: "info", msg: { type: "loading", msg: "Checking for updates..." } });
 	UP.dog(global.version)
 	.then(msg => {
-		if (msg.status === "up-to-date") {
+		if (msg.status === "up-to-date" && noinfo === false) {
 			post({
 				action: "info",
 				msg: `<c-h a="checkmark"></c-h>&nbsp;&nbsp;You are up to date! (v${global.version})`
@@ -505,7 +540,7 @@ function checkUpdates() {
 				action: "info",
 				msg: `<hyper-link link='https://github.com/HJfod/gdshare/releases/latest'>New version found! (${msg.newVer})</hyper-link>`
 			});
-		} else if (msg.status === "upper-to-date") {
+		} else if (msg.status === "upper-to-date" && noinfo === false) {
 			post({ 
 				action: "info",
 				msg: `You are using a version (${msg.oldVer}) newer than last stable release (${msg.newVer}).`
@@ -513,12 +548,12 @@ function checkUpdates() {
 		}
 	})
 	.catch(err => {
-		if (err.error === "not-200") {
+		if (err.error === "not-200" && noinfo === false) {
 			post({
 				action: "info",
 				msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err.code}: Unable to check for updates!`
 			});
-		} else if (err.error === "cant-parse") {
+		} else if (err.error === "cant-parse" && noinfo === false) {
 			post({
 				action: "info",
 				msg: `<c-h a="crossmark"></c-h>&nbsp;&nbsp;${err.msg}: Unable to check for updates!`

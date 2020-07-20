@@ -277,6 +277,11 @@ window.addEventListener("message", event => {
                 if (!args.obj.production) document.getElementById("dev-toggle").check(true);
                 document.getElementById("backup-folder").innerHTML = args.obj.backupFolder;
                 global.backupFolder = args.obj.backupFolder;
+                document.getElementById("cc-path").innerHTML = args.obj.defaultCCPath;
+                break;
+            
+            case "new-cc-path":
+                document.getElementById("cc-path").innerHTML = args.path;
                 break;
 
             case "returnCode":
