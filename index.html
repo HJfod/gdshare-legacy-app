@@ -83,6 +83,19 @@
 
                     <button onclick='ipcSend({ "action": "select-backup-folder", "current": global.backupFolder })' tID="cha-bf">Change</button>
                     <button onclick='ipcSend({ "action": "open-folder", "folder": global.backupFolder })'>Open folder</button>
+
+                    <br><br>
+
+                    <check-box saveID="autoBackup" var="enableAutoBackup">Automatic backups</check-box>
+
+                    <gmd-level toggle-var="enableAutoBackup">
+                        <text>Save data every </text><select>
+                            <option>2 weeks</option>
+                        </select><br>
+                        <text>Delete automated backups after </text><select>
+                            <option>1 week</option>
+                        </select>
+                    </gmd-level>
                 </app-page>
 
                 <app-page link="export">

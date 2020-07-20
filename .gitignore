@@ -1,3 +1,6 @@
 node_modules/
 release-builds/
 data/
+resources/autobackup/auto-backup.txt
+resources/autobackup/node_modules/
+.vscode/

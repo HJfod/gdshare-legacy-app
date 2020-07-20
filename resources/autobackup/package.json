@@ -1,0 +1,11 @@
+{
+  "name": "autobackup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "autobackup.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-notifier": "^7.0.1"
+  }
+}

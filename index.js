@@ -20,7 +20,8 @@ const global = {
 	decodeCCGM: true,
 	firstTime: false,
 	backupFolder: "",
-	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/"))
+	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
+	autoBackupLocation: `${GDShare.getDir()}/resources/autobackup/auto-backup.json`
 }
 
 const dim = { w: 440, h: 550 };
@@ -360,6 +361,7 @@ ipc.on("app", (event, args) => {
 				refreshBackups(f);
 				global.backupFolder = f;
 				saveToUserData("backupFolder", f);
+				saveToUserData("dest", global.backupFolder, global.autoBackupLocation);
 				post({ action: "info", msg: { type: "close" } });
 			} catch(e) {};
 			break;
@@ -481,6 +483,10 @@ ipc.on("app", (event, args) => {
 				defaultCCPath: global.defaultCCPath
 			} });
 
+			
+			saveToUserData("src", GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")), global.autoBackupLocation);
+			saveToUserData("dest", global.backupFolder, global.autoBackupLocation);
+
 			refreshBackups(global.backupFolder);
 
 			refreshGDData();
@@ -498,7 +504,7 @@ ipc.on("app", (event, args) => {
 			});
 			switch (asktut) {
 				case 0:
-
+					// TODO
 					break;
 				case 1:
 					showTutorial();
@@ -516,6 +522,7 @@ ipc.on("app", (event, args) => {
 				});
 
 				saveToUserData("CCPath", null);
+				saveToUserData("src", global.defaultCCPath, global.autoBackupLocation);
 
 				refreshGDData();
 			} else {
@@ -537,6 +544,7 @@ ipc.on("app", (event, args) => {
 					});
 
 					saveToUserData("CCPath", f);
+					saveToUserData("src", f, global.autoBackupLocation);
 
 					refreshGDData();
 				} catch(e) {}
@@ -718,17 +726,17 @@ function post(msg) {
 	wMain.webContents.send("app", msg);
 }
 
-function saveToUserData(key, val) {
-	try { fs.accessSync("data/userdata.txt") } catch(e) { fs.writeFileSync("data/userdata.txt", `{}`, "utf8") };
+function saveToUserData(key, val, where = "data/userdata.txt") {
+	try { fs.accessSync(where) } catch(e) { fs.writeFileSync(where, `{}`, "utf8") };
 
-	const data = JSON.parse(fs.readFileSync("data/userdata.txt", "utf8"));
+	const data = JSON.parse(fs.readFileSync(where, "utf8"));
 	if (typeof val === "object" && val !== null) {
 		if (!data[key]) data[key] = {};
 		data[key][val.key] = val.val;
 	} else {
 		data[key] = val;
 	}
-	fs.writeFileSync("data/userdata.txt", JSON.stringify(data), "utf8");
+	fs.writeFileSync(where, JSON.stringify(data), "utf8");
 }
 
 const devMenu = [
