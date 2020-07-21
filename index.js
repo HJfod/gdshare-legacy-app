@@ -21,7 +21,8 @@ const global = {
 	firstTime: false,
 	backupFolder: "",
 	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
-	autoBackupLocation: `${GDShare.getDir()}/resources/autobackup/auto-backup.json`
+	autoBackupLocation: `${GDShare.getDir()}/resources/autobackup/auto-backup.json`,
+	autoBackups: false
 }
 
 const dim = { w: 440, h: 550 };
@@ -443,6 +444,28 @@ ipc.on("app", (event, args) => {
 			.catch(err => {
 				post({ action: "info", msg: err });
 			});
+			break;
+
+		case "change-auto-backup-rate":
+			let rate;
+			let rn = args.rate.match(/\d+/);
+			rn = rn ? rn[0] : 1;
+			let rd;
+			[
+				["day", 1],
+				["week", 7],
+				["month", 30]
+			].forEach(x => {
+				if (args.rate.includes(x[0])) {
+					rd = x[1];
+				}
+			});
+			rate = rn * rd;
+			saveToUserData(`${args.type}Rate`, rate, global.autoBackupLocation);
+			break;
+
+		case "toggle-auto-backups":
+			saveToUserData(`enabled`, args.mode, global.autoBackupLocation);
 			break;
 		
 		case "init":

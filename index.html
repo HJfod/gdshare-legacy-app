@@ -86,14 +86,21 @@
 
                     <br><br>
 
-                    <check-box saveID="autoBackup" var="enableAutoBackup">Automatic backups</check-box>
+                    <check-box saveID="autoBackup" var="enableAutoBackup" ontoggle='ipcSend({ "action": "toggle-auto-backups", "mode": "__THISVAR" })'>Automatic backups</check-box>
 
                     <gmd-level toggle-var="enableAutoBackup">
-                        <text>Save data every </text><select>
+                        <text>Save data every </text><select onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "create", "rate": this.value })'>
+                            <option>day</option>
+                            <option>week</option>
                             <option>2 weeks</option>
+                            <option>month</option>
+                            <option>2 months</option>
                         </select><br>
-                        <text>Delete automated backups after </text><select>
+                        <text>Delete automated backups after </text><select onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "remove", "rate": this.value })'>
+                            <option>3 days</option>
                             <option>1 week</option>
+                            <option>3 weeks</option>
+                            <option>2 months</option>
                         </select>
                     </gmd-level>
                 </app-page>
