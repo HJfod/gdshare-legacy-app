@@ -2,11 +2,12 @@ const notifier = require("node-notifier");
 const path = require("path");
 const fs = require("fs");
 
-try {
-    const app = JSON.parse(fs.readFileSync("auto-backup.json", "utf-8"));
-    const id = `GDShare Auto-Backup ${require("./package.json").version}`;
+const app = JSON.parse(fs.readFileSync("auto-backup.json", "utf-8"));
+const id = `GDShare Auto-Backup ${require("./package.json").version}`;
+const GDcheckRate = 5000;
 
-    let make = true;
+try {
+    let make = false;
     if (app.lastBackup) {
         if (
             (Math.round(+ new Date() / 1000 / 86400) - app.lastBackup) > app.createRate
@@ -16,6 +17,7 @@ try {
     } else {
         make = true;
     }
+    if (app.createOnGDClose) make = false;
 
     if (make) {
         try {
@@ -61,4 +63,30 @@ try {
             });
         }
     }
+
+    if (app.createOnGDClose) {
+        checkGDLoop();
+    }
 } catch (e) { console.error(e) };
+
+function checkGDLoop(collect = 0) {
+    setTimeout(() => {
+        require("child_process").exec("tasklist", (stdin, stdout, stderr) => {
+            if (stdout.toLowerCase().includes("geometrydash.exe")) {
+                collect = 1;
+            } else {
+                if (collect) {
+                    console.log("here");
+                    notifier.notify({
+                        title: "you just closed gd",
+                        message: "yeah you did bitch ass i know what you're doing on your pc just look out fuckface",
+                        icon: path.join(__dirname + `/../share.ico`),
+                        appID: id
+                    });
+                    collect = 0;
+                }
+            }
+            checkGDLoop(collect);
+        });
+    }, GDcheckRate);
+}

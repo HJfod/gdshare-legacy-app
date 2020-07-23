@@ -94,14 +94,17 @@
                             <option>week</option>
                             <option>2 weeks</option>
                             <option>month</option>
-                            <option>2 months</option>
+                            <option>6 months</option>
+                            <option>time you close GD</option>
                         </select><br>
-                        <text>Delete automated backups after </text><select onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "remove", "rate": this.value })'>
-                            <option>3 days</option>
-                            <option>1 week</option>
-                            <option>3 weeks</option>
-                            <option>2 months</option>
+                        <text>Backup limit: </text><select onchange='ipcSend({ "action": "change-auto-backup-limit", "limit": this.value })'>
+                            <option>1</option>
+                            <option>3</option>
+                            <option>5</option>
+                            <option>10</option>
                         </select>
+                        <br><br>
+                        <text>If you'd like to have a backup not be automatically deleted, remove the <i>autoRemove.txt</i> file from the folder.</text>
                     </gmd-level>
                 </app-page>
 

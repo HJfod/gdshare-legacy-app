@@ -447,21 +447,30 @@ ipc.on("app", (event, args) => {
 			break;
 
 		case "change-auto-backup-rate":
-			let rate;
-			let rn = args.rate.match(/\d+/);
-			rn = rn ? rn[0] : 1;
-			let rd;
-			[
-				["day", 1],
-				["week", 7],
-				["month", 30]
-			].forEach(x => {
-				if (args.rate.includes(x[0])) {
-					rd = x[1];
-				}
-			});
-			rate = rn * rd;
-			saveToUserData(`${args.type}Rate`, rate, global.autoBackupLocation);
+			if (args.rate.includes("GD")) {
+				saveToUserData(`createOnGDClose`, true, global.autoBackupLocation);
+			} else {
+				let rate;
+				let rn = args.rate.match(/\d+/);
+				rn = rn ? rn[0] : 1;
+				let rd;
+				[
+					["day", 1],
+					["week", 7],
+					["month", 30]
+				].forEach(x => {
+					if (args.rate.includes(x[0])) {
+						rd = x[1];
+					}
+				});
+				rate = rn * rd;
+				saveToUserData(`${args.type}Rate`, rate, global.autoBackupLocation);
+				saveToUserData(`createOnGDClose`, false, global.autoBackupLocation);
+			}
+			break;
+		
+		case "change-auto-backup-limit":
+			saveToUserData(`limit`, args.limit, global.autoBackupLocation);
 			break;
 
 		case "toggle-auto-backups":
