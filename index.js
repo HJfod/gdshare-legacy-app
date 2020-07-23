@@ -22,7 +22,8 @@ const global = {
 	backupFolder: "",
 	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
 	autoBackupLocation: `${GDShare.getDir()}/resources/autobackup/auto-backup.json`,
-	autoBackups: false
+	autoBackups: false,
+	userdataLoc: "data/userdata.json"
 }
 
 const dim = { w: 440, h: 550 };
@@ -178,6 +179,8 @@ app.on("ready", () => {
 	wMain.setMenu(global.production ? null : Menu.buildFromTemplate(devMenu));
 
     wMain.on("closed", () => {
+		try { fs.accessSync(global.userdataLoc) } catch(e) { fs.writeFileSync(global.userdataLoc, `{}`, "utf8") };
+		
         app.quit();
     });
 });
@@ -481,10 +484,10 @@ ipc.on("app", (event, args) => {
 			global.backupFolder = global.defaultCCPath;
 
 			try {
-				fs.accessSync("data/userdata.txt");
+				fs.accessSync(`${global.userdataLoc}`);
 
 				post({ action: "info", msg: { type: "loading", msg: `Loading app data...` } });
-				const udat = JSON.parse( fs.readFileSync(`${GDShare.getDir()}/data/userdata.txt`, "utf8") );
+				const udat = JSON.parse( fs.readFileSync(`${GDShare.getDir()}/${global.userdataLoc}`, "utf8") );
 				if (udat.theme) {
 					const d = fs.readFileSync(`resources/${udat.theme}.gdst`, "utf-8");
 					post({ action: "switch-theme", data: d });
@@ -508,11 +511,12 @@ ipc.on("app", (event, args) => {
 			};
 
 			post({ action: "init", obj: {
-				appVersion: `v${global.version} inDEV-4`,
+				appVersion: `v${global.version}`,
 				appVersionNum: global.version,
 				production: global.production,
 				backupFolder: global.backupFolder,
-				defaultCCPath: global.defaultCCPath
+				CCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
+				buildString: `GDShare v${global.version} Build 2020_24_7_00_47 Pre-Release WIP.`
 			} });
 
 			
@@ -597,7 +601,16 @@ function checkUpdates(noinfo = false) {
 		} else if (msg.status === "new-available") {
 			post({ 
 				action: "info",
-				msg: `<hyper-link link='https://github.com/HJfod/gdshare/releases/latest'>New version found! (${msg.newVer})</hyper-link>`
+				msg: `<hyper-link link='https://github.com/HJfod/gdshare/releases/latest'>${noinfo ? "New version available!" : "New version found!"} (${msg.newVer})</hyper-link>
+				<br><br>
+				${msg.important ? `<text><t-s><b>${msg.important[1]}</b></t-s></text>
+				<br><br>` : ``}
+				<roll-over>
+					<roll-text>Release Notes</roll-text>
+					<roll-content>
+						<scroll-content>${msg.notes.replace(/\n/g,"<br>")}</scroll-content>
+					</roll-content>
+				</roll-over>`
 			});
 		} else if (msg.status === "upper-to-date" && noinfo === false) {
 			post({ 
@@ -758,7 +771,7 @@ function post(msg) {
 	wMain.webContents.send("app", msg);
 }
 
-function saveToUserData(key, val, where = "data/userdata.txt") {
+function saveToUserData(key, val, where = global.userdataLoc) {
 	try { fs.accessSync(where) } catch(e) { fs.writeFileSync(where, `{}`, "utf8") };
 
 	const data = JSON.parse(fs.readFileSync(where, "utf8"));

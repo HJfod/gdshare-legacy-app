@@ -269,15 +269,14 @@ window.addEventListener("message", event => {
                 break;
 
             case "init":
-                document.getElementById("version-text").innerHTML = 
-                document.getElementById("version-text").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
                 document.querySelector(".version-title").innerHTML = 
                 document.querySelector(".version-title").innerHTML.replace(/__VERSION/g, args.obj.appVersion);
                 document.querySelector(".version-title").style.opacity = .4;
                 if (!args.obj.production) document.getElementById("dev-toggle").check(true);
                 document.getElementById("backup-folder").innerHTML = args.obj.backupFolder;
                 global.backupFolder = args.obj.backupFolder;
-                document.getElementById("cc-path").innerHTML = args.obj.defaultCCPath;
+                document.getElementById("cc-path").innerHTML = args.obj.CCPath;
+                arr(document.querySelectorAll(".gdshare-build-info")).forEach(x => x.innerHTML = args.obj.buildString);
                 break;
             
             case "new-cc-path":

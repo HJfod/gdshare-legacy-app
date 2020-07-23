@@ -1,5 +1,3 @@
-@import url("main.css");
-
 app-tabs {
     height: var(--size-tab);
     width: 100%;
@@ -93,4 +91,13 @@ w-small {
     font-size: var(--size-text);
     opacity: .5;
     display: block;
+}
+
+.build-locked {
+    display: block;
+    margin-bottom: 0px;
+    bottom: 0px;
+    position: absolute;
+    font-size: calc( var(--size-text) / 1.2 );
+    opacity: 0.3;
 }

@@ -25,9 +25,9 @@ function dog(appv) {
                             resolve({ status: "up-to-date" })
                         }else{
                             if (Number(newv.replace(/\./g,"")) > Number(appv.replace(/\./g,""))){
-                                resolve({ status: "new-available", newVer: newv, oldVer: appv })
+                                resolve({ status: "new-available", newVer: newv, oldVer: appv, notes: parsedData.body.replace(/\*\*\*(.*?)\*\*\*/g,""), important: parsedData.body.match(/\*\*\*(.*?)\*\*\*/) });
                             }else{
-                                resolve({ status: "upper-to-date", newVer: newv, oldVer: appv })
+                                resolve({ status: "upper-to-date", newVer: newv, oldVer: appv });
                             }
                         }
                     } catch (e) {

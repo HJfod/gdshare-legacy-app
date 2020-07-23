@@ -61,6 +61,8 @@
                                 <user-stats></user-stats>
                             </roll-content>
                         </roll-over>
+
+                        <text><t-dark class="gdshare-build-info build-locked"></t-dark></text>
                     </home-screen>
                 </app-page>
 
@@ -88,8 +90,8 @@
 
                     <check-box saveID="autoBackup" var="enableAutoBackup" ontoggle='ipcSend({ "action": "toggle-auto-backups", "mode": "__THISVAR" })'>Automatic backups</check-box>
 
-                    <gmd-level toggle-var="enableAutoBackup">
-                        <text>Save data every </text><select onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "create", "rate": this.value })'>
+                    <gmd-level toggle-var="enableAutoBackup" id="auto-backup-div">
+                        <text>Save data every </text><select onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "create", "rate": this.value }); this.value==="time you close GD" ? document.querySelector("#backup-warning").style.display="initial" : document.querySelector("#backup-warning").style.display="none"'>
                             <option>day</option>
                             <option>week</option>
                             <option>2 weeks</option>
@@ -97,6 +99,7 @@
                             <option>6 months</option>
                             <option>time you close GD</option>
                         </select><br>
+                        <div style="display: none" id="backup-warning"><text><i>The "Every time you close GD" option may cause periodic lag spikes.</i></text><br><br></div>
                         <text>Backup limit: </text><select onchange='ipcSend({ "action": "change-auto-backup-limit", "limit": this.value })'>
                             <option>1</option>
                             <option>3</option>
@@ -212,7 +215,7 @@
                     <roll-over>
                         <roll-text>About</roll-text>
                         <roll-content>
-
+                            <br>
                             <roll-over style="margin-left: calc( var(--size-pad) / 2 )">
                                 <roll-text>Developers</roll-text>
                                 <roll-content>
@@ -236,7 +239,7 @@
 
                             <br><br>
 
-                            <text id="version-text"><t-dark>Version: __VERSION</t-dark></text>
+                            <text id="version-text"><t-dark>Version: <text class="gdshare-build-info"></text></t-dark></text>
 
                             <br><br>
 
