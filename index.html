@@ -91,7 +91,7 @@
                     <check-box saveID="autoBackup" var="enableAutoBackup" ontoggle='ipcSend({ "action": "toggle-auto-backups", "mode": "__THISVAR" })'>Automatic backups</check-box>
 
                     <gmd-level toggle-var="enableAutoBackup" id="auto-backup-div">
-                        <text>Save data every </text><select onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "create", "rate": this.value }); this.value==="time you close GD" ? document.querySelector("#backup-warning").style.display="initial" : document.querySelector("#backup-warning").style.display="none"'>
+                        <text>Save data every </text><select id="ab-rate" onchange='ipcSend({ "action": "change-auto-backup-rate", "type": "create", "rate": this.value }); this.value==="time you close GD" ? document.querySelector("#backup-warning").style.display="initial" : document.querySelector("#backup-warning").style.display="none"'>
                             <option>day</option>
                             <option>week</option>
                             <option>2 weeks</option>
@@ -99,8 +99,11 @@
                             <option>6 months</option>
                             <option>time you close GD</option>
                         </select><br>
-                        <div style="display: none" id="backup-warning"><text><i>The "Every time you close GD" option may cause periodic lag spikes.</i></text><br><br></div>
-                        <text>Backup limit: </text><select onchange='ipcSend({ "action": "change-auto-backup-limit", "limit": this.value })'>
+                        <div style="display: none" id="backup-warning">
+                            <text><i>The "Every time you close GD" option contains a few issues.</i></text>
+                            <hyper-link black splash="<br><t-m>A backup won't be created if you close GD instantly after opening.</t-m><br><br>The app checks every once in a while if GD is open. While the few operations it does to achieve this should never cause anything noticable, <t-m>it is possible it can cause lag spikes on low-end devices</t-m>, however unlikely.<br><br>Once upon a time, I encountered a bug where the autobackuper corrupted my GD files. I have no clue why that happened and I have no clue why it's never happened again. If you do encounter this bug, please let me know. Cheers! -HJfod<br>">More info</hyper-link><br><br>
+                        </div>
+                        <text>Backup limit: </text><select id="ab-limit" onchange='ipcSend({ "action": "change-auto-backup-limit", "limit": this.value })'>
                             <option>1</option>
                             <option>3</option>
                             <option>5</option>

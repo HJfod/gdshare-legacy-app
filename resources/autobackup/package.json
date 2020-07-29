@@ -1,11 +1,9 @@
 {
-  "name": "autobackup",
-  "version": "1.0.0",
-  "description": "",
-  "main": "autobackup.js",
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "node-notifier": "^7.0.1"
-  }
+    "name": "autobackup",
+    "version": "1.0.0",
+    "main": "autobackup.js",
+    "bin": "autobackup.js",
+    "scripts": {
+      "exe": "pkg package.json --targets x64"
+    }
 }

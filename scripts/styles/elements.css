@@ -231,6 +231,16 @@ hyper-link:hover {
 	cursor: pointer;
 }
 
+.hyper-black {
+    color: inherit;
+    opacity: .5;
+}
+
+.hyper-black:hover {
+    color: inherit;
+    opacity: 1;
+}
+
 dev-t {
     display: block;
     transition-duration: var(--trans);

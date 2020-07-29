@@ -2,20 +2,35 @@ const { BrowserWindow, app, shell, dialog, Menu } = require("electron");
 const ipc = require("electron").ipcMain;
 const path = require("path");
 const fs = require("fs");
-const ncp = require('ncp').ncp
+const ncp = require('ncp').ncp;
 
 const GDShare = require("./scripts/backend/gdshare.js");
 const UP = require("./scripts/backend/update.js");
-const update = require("./scripts/backend/update.js");
 
 GDShare.initializeApp();
+
+const AutoLaunch = require('auto-launch');
+
+const autoBackupLauncher = new AutoLaunch({
+	name: 'GDShareAutoBackup',
+	path: `${GDShare.getDir()}/release-builds/gdshare-win32-ia32/gdshare.exe`,
+	isHidden: false
+});
+
+console.log(`${GDShare.getDir()}/resources/autobackup/autobackup.exe`);
+
+autoBackupLauncher.enable();
+
+autoBackupLauncher.isEnabled().then(isEnabled => {
+    if (!isEnabled) autoBackupLauncher.enable();
+});
 
 let wMain;
 const global = {
 	GDdata: "",
 	GDlevels: [],
-	version: require('./package.json').version,
-	production: require('./package.json').production,
+	version: require('./../package.json').version,
+	production: require('./../package.json').production,
 	largeFileSize: 20,
 	decodeCCGM: true,
 	firstTime: false,
@@ -470,10 +485,12 @@ ipc.on("app", (event, args) => {
 				saveToUserData(`${args.type}Rate`, rate, global.autoBackupLocation);
 				saveToUserData(`createOnGDClose`, false, global.autoBackupLocation);
 			}
+			saveToUserData(`autoBackupRate`, args.rate);
 			break;
 		
 		case "change-auto-backup-limit":
 			saveToUserData(`limit`, args.limit, global.autoBackupLocation);
+			saveToUserData(`autoBackupLimit`, args.limit);
 			break;
 
 		case "toggle-auto-backups":
@@ -505,6 +522,9 @@ ipc.on("app", (event, args) => {
 				}
 				if (udat.CCPath) {
 					GDShare.setCCFolder(udat.CCPath);
+				}
+				if (udat.autoBackupRate || udat.autoBackupLimit) {
+					post({ action: "auto-backup-state", rate: udat.autoBackupRate, limit: udat.autoBackupLimit });
 				}
 			} catch(e) {
 				global.firstTime = true;

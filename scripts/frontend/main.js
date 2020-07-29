@@ -282,6 +282,11 @@ window.addEventListener("message", event => {
             case "new-cc-path":
                 document.getElementById("cc-path").innerHTML = args.path;
                 break;
+            
+            case "auto-backup-state":
+                if (args.rate) document.getElementById("ab-rate").value = args.rate;
+                if (args.limit) document.getElementById("ab-limit").value = args.limit;
+                break;
 
             case "returnCode":
                 switch (args.code.split("::").shift()) {
@@ -370,6 +375,12 @@ class HyperLink extends HTMLElement {
                 ipcSend({ action: "open-link", link: this.getAttribute("link") });
             });
         }
+        if (this.hasAttribute("splash")) {
+            this.addEventListener("click", () => {
+                splash(this.getAttribute("splash"));
+            });
+        }
+        if (this.hasAttribute("black")) this.classList.add("hyper-black");
     }
 }
 

@@ -4,3 +4,4 @@ data/
 resources/autobackup/auto-backup.json
 resources/autobackup/node_modules/
 .vscode/
+Squirrel.exe
