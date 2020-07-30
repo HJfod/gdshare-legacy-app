@@ -29,8 +29,8 @@ let wMain;
 const global = {
 	GDdata: "",
 	GDlevels: [],
-	version: require('./../package.json').version,
-	production: require('./../package.json').production,
+	version: require('./package.json').version,
+	production: require('./package.json').production,
 	largeFileSize: 20,
 	decodeCCGM: true,
 	firstTime: false,
