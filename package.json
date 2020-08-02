@@ -3,22 +3,33 @@
   "productName": "GDShare",
   "version": "1.0.0",
   "description": "Geometry Dash Backup & Level Sharing Application",
-  "main": "app/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "electron .",
+    "build": "electron-builder --win --x64",
     "pack": "electron-packager . gdshare --overwrite --asar --platform=win32 --arch=ia32 --ignore=.gitignore --ignore='data/' --extraResource='EULA.txt' --extraResource='resources/light.gdst' --extraResource='resources/dark.gdst' --extraResource='resources/mid.gdst' --extraResource='resources/amoled.gdst' --icon=resources/share.ico --prune=true --out=release-builds"
   },
   "author": "HJfod",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^9.0.4",
-    "electron-packager": "^15.0.0",
-    "electron-winstaller": "^4.0.1"
+    "electron": "^9.0.4"
   },
   "dependencies": {
-    "auto-launch": "^5.0.5",
+    "electron-packager": "^15.0.0",
     "ncp": "^2.0.0",
     "pako": "^1.0.11"
+  },
+  "build": {
+    "appId": "com.electron.gdshare",
+    "files": [
+      "**"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "extraFiles": [
+      "resources"
+    ]
   },
   "production": false
 }

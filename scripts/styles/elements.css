@@ -378,6 +378,7 @@ help-button {
 help-button:hover {
     background-color: var(--color-secondary);
     opacity: 1;
+    cursor: pointer;
 }
 
 

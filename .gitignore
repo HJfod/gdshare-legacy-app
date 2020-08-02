@@ -2,6 +2,7 @@ node_modules/
 release-builds/
 data/
 resources/autobackup/auto-backup.json
+resources/autobackup/autobackup.exe
 resources/autobackup/node_modules/
 .vscode/
 Squirrel.exe

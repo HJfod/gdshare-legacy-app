@@ -6,24 +6,38 @@ const ncp = require('ncp').ncp;
 
 const GDShare = require("./scripts/backend/gdshare.js");
 const UP = require("./scripts/backend/update.js");
+const createShortcut = require("./scripts/backend/shortcut.js");
 
 GDShare.initializeApp();
 
-const AutoLaunch = require('auto-launch');
+try {
+	const p = {
+		o: `${GDShare.getDir()}/resources/autobackup/run.vbs`,
+		n: `${(process.env.HOME || process.env.USERPROFILE).replace(/\\/g, "/")}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/gdshare-autobackup.lnk`
+	};
+	try {
+		fs.accessSync(p.o);
 
-const autoBackupLauncher = new AutoLaunch({
-	name: 'GDShareAutoBackup',
-	path: `${GDShare.getDir()}/release-builds/gdshare-win32-ia32/gdshare.exe`,
-	isHidden: false
-});
+		try {
+			console.log(p.n);
 
-console.log(`${GDShare.getDir()}/resources/autobackup/autobackup.exe`);
+			if (!createShortcut({
+				input: p.o,
+				output: p.n,
+				comment: "GDShare Automated Backups",
+				icon: `${GDShare.getDir()}/resources/share.ico`
+			})) throw "Unable to create shortcut!";
 
-autoBackupLauncher.enable();
-
-autoBackupLauncher.isEnabled().then(isEnabled => {
-    if (!isEnabled) autoBackupLauncher.enable();
-});
+			console.log(`Autobackup added to startup!`);
+		} catch(e) {
+			console.log(`Unable to add autobackup to startup: ${e}`);
+		}
+	} catch(e) {
+		console.error(`Autobackup.exe doesn't exist. ${e}`);
+	}
+} catch(e) {
+	console.error(`Unable to add autobackup to startup! ${e}`);
+}
 
 let wMain;
 const global = {
@@ -44,7 +58,7 @@ const global = {
 const dim = { w: 440, h: 550 };
 const windowSettings = {
     frame: false, 
-	icon: path.join(__dirname,"resources/share.ico"), 
+	icon: `${GDShare.getDir()}/resources/share.ico`,
 	height: dim.h, 
 	width: dim.w, 
 	webPreferences: { 

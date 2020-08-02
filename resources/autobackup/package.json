@@ -4,6 +4,9 @@
     "main": "autobackup.js",
     "bin": "autobackup.js",
     "scripts": {
-      "exe": "pkg package.json --targets x64"
+        "exe": "pkg package.json --targets x64"
+    },
+    "dependencies": {
+        "pkg": "^4.4.9"
     }
 }
