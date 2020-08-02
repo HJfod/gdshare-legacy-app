@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win --x64",
-    "pack": "electron-packager . gdshare --overwrite --asar --platform=win32 --arch=ia32 --ignore=.gitignore --ignore='data/' --extraResource='EULA.txt' --extraResource='resources/light.gdst' --extraResource='resources/dark.gdst' --extraResource='resources/mid.gdst' --extraResource='resources/amoled.gdst' --icon=resources/share.ico --prune=true --out=release-builds"
+    "pack": "electron-packager . gdshare --overwrite --asar --platform=win32 --arch=ia32 --ignore=.gitignore --ignore='data/' --extraResource='EULA.txt' --extraResource='resources/light.gdst' --extraResource='resources/dark.gdst' --extraResource='resources/mid.gdst' --extraResource='resources/amoled.gdst' --extraResource='resources/icon.ico' --extraResource='resources/autobackup' --icon=resources/icon.ico --prune=true --out=release-builds"
   },
   "author": "HJfod",
   "license": "ISC",
@@ -31,5 +31,5 @@
       "resources"
     ]
   },
-  "production": false
+  "production": true
 }

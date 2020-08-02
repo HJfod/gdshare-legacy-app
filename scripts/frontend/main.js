@@ -281,7 +281,7 @@ window.addEventListener("message", event => {
                     document.querySelector(`check-box[var="enableAutoBackup"]`).style.display = "none";
                     document.querySelector(`check-box[var="enableAutoBackup"]`).check(false);
                     document.querySelector(`#auto-backup-div`).style.display = "none";
-                    document.querySelector("#ab-error").style.opacity = 1;
+                    document.querySelector("#ab-error").style.display = "initial";
                 }
                 break;
             
