@@ -277,6 +277,12 @@ window.addEventListener("message", event => {
                 global.backupFolder = args.obj.backupFolder;
                 document.getElementById("cc-path").innerHTML = args.obj.CCPath;
                 arr(document.querySelectorAll(".gdshare-build-info")).forEach(x => x.innerHTML = args.obj.buildString);
+                if (!args.obj.autobackupPossible) {
+                    document.querySelector(`check-box[var="enableAutoBackup"]`).style.display = "none";
+                    document.querySelector(`check-box[var="enableAutoBackup"]`).check(false);
+                    document.querySelector(`#auto-backup-div`).style.display = "none";
+                    document.querySelector("#ab-error").style.opacity = 1;
+                }
                 break;
             
             case "new-cc-path":

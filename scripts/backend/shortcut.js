@@ -1,7 +1,14 @@
 const path = require('path');
+const { accessSync } = require('fs');
 const spawn = require('child_process').spawnSync;
 
 function createShortcut(options) {
+    try {
+        accessSync(options.input);
+
+        return true;
+    } catch(e) {}
+
     const vbsScript = path.join(__dirname, 'windows.vbs');
     
     let success = true;

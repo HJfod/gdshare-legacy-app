@@ -389,3 +389,11 @@ scroll-content {
     width: 100%;
     overflow-y: auto;
 }
+
+error-msg {
+    background: rgba(255,0,0,.25);
+    display: block;
+    width: calc( 100% - 4 * var(--size-pad) );
+    border-radius: var(--size-corner);
+    padding: var(--size-pad);
+}

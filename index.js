@@ -10,6 +10,23 @@ const createShortcut = require("./scripts/backend/shortcut.js");
 
 GDShare.initializeApp();
 
+let wMain;
+const global = {
+	GDdata: "",
+	GDlevels: [],
+	version: require('./package.json').version,
+	production: require('./package.json').production,
+	largeFileSize: 20,
+	decodeCCGM: true,
+	firstTime: false,
+	backupFolder: "",
+	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
+	autoBackupLocation: `${GDShare.getDir()}/resources/autobackup/auto-backup.json`,
+	autoBackups: false,
+	userdataLoc: "data/userdata.json",
+	autobackupSuccesful: false
+}
+
 try {
 	const p = {
 		o: `${GDShare.getDir()}/resources/autobackup/run.vbs`,
@@ -28,6 +45,7 @@ try {
 				icon: `${GDShare.getDir()}/resources/share.ico`
 			})) throw "Unable to create shortcut!";
 
+			global.autobackupSuccesful = true;
 			console.log(`Autobackup added to startup!`);
 		} catch(e) {
 			console.log(`Unable to add autobackup to startup: ${e}`);
@@ -39,26 +57,10 @@ try {
 	console.error(`Unable to add autobackup to startup! ${e}`);
 }
 
-let wMain;
-const global = {
-	GDdata: "",
-	GDlevels: [],
-	version: require('./package.json').version,
-	production: require('./package.json').production,
-	largeFileSize: 20,
-	decodeCCGM: true,
-	firstTime: false,
-	backupFolder: "",
-	defaultCCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
-	autoBackupLocation: `${GDShare.getDir()}/resources/autobackup/auto-backup.json`,
-	autoBackups: false,
-	userdataLoc: "data/userdata.json"
-}
-
 const dim = { w: 440, h: 550 };
 const windowSettings = {
     frame: false, 
-	icon: `${GDShare.getDir()}/resources/share.ico`,
+	icon: `${GDShare.getDir()}/resources/icon.ico`,
 	height: dim.h, 
 	width: dim.w, 
 	webPreferences: { 
@@ -550,7 +552,8 @@ ipc.on("app", (event, args) => {
 				production: global.production,
 				backupFolder: global.backupFolder,
 				CCPath: GDShare.getCCPath().substring(0, GDShare.getCCPath().lastIndexOf("/")),
-				buildString: `GDShare v${global.version} Build 2020_24_7_00_47 Pre-Release WIP.`
+				buildString: `GDShare v${global.version} Build 200802`,
+				autobackupPossible: global.autobackupSuccesful
 			} });
 
 			
@@ -567,6 +570,8 @@ ipc.on("app", (event, args) => {
 			break;
 		
 		case "view-tutorial":
+			showTutorial();
+			/*
 			const asktut = dialog.showMessageBoxSync({
 				type: "info",
 				buttons: [ "How to use GDShare on a GDPS (Private Server)", "View tutorial", "Cancel" ],
@@ -577,9 +582,9 @@ ipc.on("app", (event, args) => {
 					// TODO
 					break;
 				case 1:
-					showTutorial();
 					break;
 			}
+			*/
 			break;
 		
 		case "select-new-cc-path":

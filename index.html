@@ -88,6 +88,8 @@
 
                     <br><br>
 
+                    <error-msg id="ab-error" style="opacity: 0;">Auto backups are not available as there's been an error.</error-msg>
+
                     <check-box saveID="autoBackup" var="enableAutoBackup" ontoggle='ipcSend({ "action": "toggle-auto-backups", "mode": "__THISVAR" })'>Automatic backups</check-box>
 
                     <gmd-level toggle-var="enableAutoBackup" id="auto-backup-div">
@@ -236,9 +238,7 @@
                                 </roll-content>
                             </roll-over>
 
-                            <hyper-link link="https://github.com/HJfod/gd-backup">Github page (original)</hyper-link>
-                            <c-d></c-d>
-                            <hyper-link link="https://github.com/HJfod/gdshare">Github page (new)</hyper-link>
+                            <hyper-link link="https://github.com/HJfod/gdshare">Github page</hyper-link>
 
                             <br><br>
 
