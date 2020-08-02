@@ -1,6 +1,6 @@
 GDShare is an application for Geometry Dash meant to provide easy and secure tools for collab hosts and creators.
 
-![GDShare](https://cdn.discordapp.com/attachments/710138816073302046/739584709012750406/point.png){:height="10%" width="10%"}
+![GDShare](https://cdn.discordapp.com/attachments/710138816073302046/739587249351426098/small.png)
 
 ### Installation
 
