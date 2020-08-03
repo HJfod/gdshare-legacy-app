@@ -1,4 +1,4 @@
-GDShare is an application for Geometry Dash meant to provide easy and secure tools for collab hosts and creators.
+GDShare is a tool for Geometry Dash meant to provide easy and secure transmission of levels & data backups for collab hosts and creators.
 
 ![GDShare](https://cdn.discordapp.com/attachments/710138816073302046/739587249351426098/small.png)
 
@@ -45,3 +45,11 @@ Developed by
  * Simonoson
 
 Special thanks to SMJS :)
+
+Dependencies:
+
+@electron/electron@9.0.4
+@electron/electron-packager@15.0.0
+@AvianFlu/ncp@2.0.0
+@nodeca/pako@1.0.11
+@vercel/pkg@4.4.9
