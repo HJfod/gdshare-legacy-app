@@ -4,13 +4,13 @@ GDShare is a tool for Geometry Dash meant to provide easy and secure transmissio
 
 ### Installation
 
-1. Go to [the latest release](https:/github.com/HJfod/GDshare/releases/latest) and download the topmost asset (Usually named gdshare-version or something)
+1. Go to [the latest release](/HJfod/GDshare/releases/latest) and download the topmost asset (Usually named gdshare-version or something)
 
 2. Unzip the downloaded zip file to the location of your choosing
 
 3. Run GDShare.exe
 
- * If you run into problems, send a message to HJfod#1795 on Discord or open an [Issue](https://github.com/HJfod/gdshare/issues) here!
+ * If you run into problems, send a message to HJfod#1795 on Discord or open an [Issue](/HJfod/gdshare/issues) here!
 
 ### Usage
 
