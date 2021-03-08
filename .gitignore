@@ -6,3 +6,5 @@ resources/autobackup/autobackup.exe
 resources/autobackup/node_modules/
 .vscode/
 Squirrel.exe
+dist/
+.DS_Store

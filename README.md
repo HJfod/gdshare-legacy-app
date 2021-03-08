@@ -29,7 +29,7 @@ When opening the app, it will present you with a tutorial that will walk you thr
 
 Because we're not trying to claim this is an ideal app, here's a list of potential issues.
 
- * This is only available on Windows. I have looked into creating an Android version, but unfortunately that is impossible due to Android security.
+ * This is only available on Windows and MacOS. I have looked into creating an Android version, but unfortunately that is impossible due to Android security.
  * The app may (and likely does) contain bugs.
 
 ### Contribution
@@ -43,6 +43,7 @@ Developed by
  * GDColon
  * Mercury
  * Simonoson
+ * camden314
 
 Special thanks to SMJS :)
 
