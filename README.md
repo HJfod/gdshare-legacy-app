@@ -6,9 +6,15 @@ GDShare is a tool for Geometry Dash meant to provide easy and secure transmissio
 
 1. Go to [the latest release](https://github.com/HJfod/GDshare/releases/latest) and download the topmost asset (Usually named gdshare-version or something)
 
-2. Unzip the downloaded zip file to the location of your choosing
+For Windows:
+	2. Unzip the downloaded zip file to the location of your choosing
 
-3. Run GDShare.exe
+	3. Run GDShare.exe
+
+For Mac:
+	2. Open the disk image file and move the GDShare app into the Applications folder
+
+	3. Run GDShare
 
  * If you run into problems, send a message to HJfod#1795 on Discord or open an [Issue](https://github.com/HJfod/gdshare/issues) here!
 
@@ -29,7 +35,7 @@ When opening the app, it will present you with a tutorial that will walk you thr
 
 Because we're not trying to claim this is an ideal app, here's a list of potential issues.
 
- * This is only available on Windows. I have looked into creating an Android version, but unfortunately that is impossible due to Android security.
+ * This is only available on Windows and MacOS. I have looked into creating an Android version, but unfortunately that is impossible due to Android security.
  * The app may (and likely does) contain bugs.
 
 ### Contribution
@@ -43,6 +49,7 @@ Developed by
  * GDColon
  * Mercury
  * Simonoson
+ * camden314
 
 Special thanks to SMJS :)
 
