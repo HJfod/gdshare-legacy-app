@@ -3,6 +3,7 @@ const ipc = require("electron").ipcMain;
 const path = require("path");
 const fs = require("fs");
 const ncp = require('ncp').ncp;
+const mac = require('os').platform() == "darwin";
 
 const GDShare = require("./scripts/backend/gdshare.js");
 const UP = require("./scripts/backend/update.js");
@@ -240,7 +241,11 @@ ipc.on("app", (event, args) => {
 			break;
 		
 		case "open-folder":
-			require('child_process').exec('start "" "' + args.folder + '"');
+			if (mac) {
+				require('child_process').exec('open "' + args.folder + '"');
+			} else {
+				require('child_process').exec('start "" "' + args.folder + '"');
+			}
 			break;
 
 		case "switch-theme":
@@ -425,7 +430,6 @@ ipc.on("app", (event, args) => {
 
 				fs.writeFileSync(GDShare.getCCPath(), CCL);
 				fs.writeFileSync(GDShare.getCCPath("gm"), CCG);
-
 				refreshGDData();
 			}
 			break;
@@ -674,7 +678,9 @@ function checkUpdates(noinfo = false) {
 }
 
 function checkGDOpen() {
-	if (require('child_process').execSync("tasklist").toString().toLowerCase().indexOf('geometrydash.exe') > -1) {
+	const exec = mac ? "ps axco command" : "tasklist";
+	const search = mac ? "geometry dash" : "geometrydash.exe"
+	if (require('child_process').execSync(exec).toString().toLowerCase().indexOf(search) > -1) {
 		dialog.showMessageBoxSync({
 			type: "error",
 			buttons: [ "OK" ],

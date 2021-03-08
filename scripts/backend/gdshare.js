@@ -4,6 +4,9 @@ const exec = require('child_process').exec;
 const path = require("path");
 const pako = require("pako");
 const fs = require("fs");
+const crypto = require('crypto');
+const mac = require('os').platform() == "darwin";
+const assert = require('assert');
 const { performance } = require('perf_hooks');
 const fileExt = ".gmd";
 
@@ -124,9 +127,38 @@ function getGDUserInfo(data) {
     };
 }
 
+function encodeCCDataMac(saveData) {
+    /**
+     * @author camden314
+     * @param {String} data The file contents
+     * @description Validate and encode CCLocalLevels/CCGameManager for Mac
+     * @returns {Object} Error: Something went wrong, Data: the encoded save data
+     */
+    return new Promise((res, rej) => {
+        let newData = saveData;
+
+        if (!mac) {
+            res(newData);
+        } else {
+            let t0 = performance.now();
+
+            try {
+                newData += '\x0b'.repeat(16-saveData.length%16);
+                let cipher = crypto.createCipheriv("aes-256-ecb", 'ipu9TUv54yv]isFMh5@;t.5w34E2Ry@{', '');
+                newData = cipher.update(Buffer.from(newData));
+            } catch(e) {
+                rej(e);
+            }
+            t1 = performance.now();
+            console.log(`encode ${Math.round(t1 - t0)}ms`);
+            res(newData);
+        }
+    });
+}
+
 function decodeCCFile(path) {
     /**
-     * @author GDColon, HJfod
+     * @author GDColon, HJfod, camden314
      * @param {String} path The path to the data folder
      * @description Validate and decode CCLocalLevels / CCGameManager
      * @returns {Object} Error: Something went wrong, Data: the decoded save data.
@@ -138,7 +170,7 @@ function decodeCCFile(path) {
         let t0 = performance.now();
         
         try {
-            saveData = fs.readFileSync(path, "utf8");
+            saveData = fs.readFileSync(path, mac ? "binary" : "utf8");
         } catch (err) {
             rej(`Unable to read file! ${err}`);
         }
@@ -151,7 +183,13 @@ function decodeCCFile(path) {
             t0 = performance.now();
             
             try {
-                saveData = new TextDecoder("utf-8").decode(pako.inflate(Buffer.from(saveData.split("").map((str) => String.fromCharCode(11 ^ str.charCodeAt(0))).join("").replace(/-/g, "+").replace(/_/g, "/"), "base64")))
+                if (mac) {
+                    let decipher = crypto.createDecipheriv("aes-256-ecb", 'ipu9TUv54yv]isFMh5@;t.5w34E2Ry@{', '');
+                    decipher.setAutoPadding(false);
+                    saveData = new TextDecoder("utf-8").decode(decipher.update(Buffer.from(saveData, 'binary')));
+                } else {
+                    saveData = new TextDecoder("utf-8").decode(pako.inflate(Buffer.from(saveData.split("").map((str) => String.fromCharCode(11 ^ str.charCodeAt(0))).join("").replace(/-/g, "+").replace(/_/g, "/"), "base64")))
+                }
             } catch(e) {
                 rej(e);
             }
@@ -193,7 +231,9 @@ function importLevel(filePath, dataPath, data = "") {
         data[1] = data[1].replace(/<k>k_(\d+)<\/k><d><k>kCEK<\/k>/g, (n) => { return "<k>k_" + (Number(n.slice(5).split("<")[0])+1) + "</k><d><k>kCEK</k>" })
         data = data[0] + "<k>_isArr</k><t /><k>k_0</k>" + levelFile + data[1]
         
-        fs.writeFileSync(dataPath, data, 'utf8');
+        encodeCCDataMac(data).then(edata => {
+            fs.writeFileSync(dataPath, edata, mac ? 'binary' : 'utf8');
+        });
 
         res({ newData: data, levelData: levelFile, info: `Imported ${levelFile.match(/<k>k2<\/k><s>(.+?)<\/s>/)}.` });
     });
@@ -350,6 +390,7 @@ function getDir() {
 }
 
 function getCCPath(which = "ll") {
+    const subpath = mac ? "/Library/Application Support/GeometryDash/" : "/AppData/Local/GeometryDash/";
     if (OtherCCPath) {
         if (which === "gm") {
             return `${OtherCCPath}/CCGameManager.dat`;
@@ -358,9 +399,9 @@ function getCCPath(which = "ll") {
         }
     } else {
         if (which === "gm") {
-            return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCGameManager.dat").replace(/\\/g,"/");
+            return ((process.env.HOME || process.env.USERPROFILE) + subpath + "CCGameManager.dat").replace(/\\/g,"/");
         } else {
-            return ((process.env.HOME || process.env.USERPROFILE) + "/AppData/Local/GeometryDash/CCLocalLevels.dat").replace(/\\/g,"/");
+            return ((process.env.HOME || process.env.USERPROFILE) + subpath + "CCLocalLevels.dat").replace(/\\/g,"/");
         }
     }
 }
@@ -392,6 +433,7 @@ module.exports = {
     verifyDataFolder,
     getLevels,
     decodeCCFile,
+    encodeCCDataMac,
     importLevel,
     exportLevel,
     getKey,
