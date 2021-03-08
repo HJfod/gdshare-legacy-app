@@ -130,7 +130,7 @@ function getGDUserInfo(data) {
 function encodeCCDataMac(saveData) {
     /**
      * @author camden314
-     * @param {String} data The file contents
+     * @param {String} saveData The file contents
      * @description Validate and encode CCLocalLevels/CCGameManager for Mac
      * @returns {Object} Error: Something went wrong, Data: the encoded save data
      */

@@ -61,7 +61,7 @@ try {
 const dim = { w: 440, h: 550 };
 const windowSettings = {
     frame: false, 
-	icon: `${GDShare.getDir()}/resources/icon.ico`,
+	icon: mac ? `${GDShare.getDir()}/resources/GDShare.icns` : `${GDShare.getDir()}/resources/icon.ico`,
 	height: dim.h, 
 	width: dim.w, 
 	webPreferences: { 
