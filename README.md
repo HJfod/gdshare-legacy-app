@@ -1,3 +1,8 @@
+# IMPORTANT!!
+**This software has been deprecated. Consider using [the integrated mod](https://github.com/HJfod/GDShare-mod) instead.**
+
+------
+
 GDShare is a tool for Geometry Dash meant to provide easy and secure transmission of levels & data backups for collab hosts and creators.
 
 ![GDShare](https://cdn.discordapp.com/attachments/710138816073302046/739587249351426098/small.png)
